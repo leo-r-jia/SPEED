@@ -12,5 +12,14 @@ export class ArticleService {
     return await newArticle.save();
   }
 
+  async getAllArticles(): Promise<Article[]> {
+    return await this.articleModel.find().exec();
+  }
+
+  async findArticlesByTitle(keyword: string): Promise<Article[]> {
+    return await this.articleModel.find({ title: new RegExp(keyword, 'i') }).exec();
+  }
+  
+
   // ... other CRUD methods ...
 }
