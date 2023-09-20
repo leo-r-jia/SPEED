@@ -1,7 +1,11 @@
 const mongoose = require('mongoose');
 const config = require('config');
 //const db = config.get('mongoURI');
-const db = process.env.MONGODB_URI;
+//const db = process.env.MONGODB_URI;
+
+const isLocal = process.env.VERCEL_ENV === 'development';
+const db = isLocal ? config.get('mongoURI') : process.env.MONGODB_URI;
+
 
 const connectDB = async () => {
     try {
