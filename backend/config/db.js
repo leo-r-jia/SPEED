@@ -19,4 +19,24 @@ const connectDB = async () => {
     }
 };
 
-module.exports = connectDB;
+let dbInstance = null;
+async function connectToDatabase() {
+    if(dbInstance) {
+        return dbInstance;
+    }
+
+    mongoose.set('strictQuery', true);
+    const connection = await mongoose.connect(db, {
+        useNewUrlParser: true,
+    });
+    dbInstance = connection;
+    return dbInstance;
+}
+
+module.exports = {
+    connectDB,
+    connectToDatabase
+};
+
+
+

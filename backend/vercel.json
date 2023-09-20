@@ -1,0 +1,24 @@
+{
+    "version": 2,
+    "builds": [
+      {
+        "src": "api/**/*.js",
+        "use": "@vercel/node"
+      }
+    ],
+    "routes": [
+      {
+        "src": "/api/articles",
+        "dest": "/api/articles/index.js"
+      },
+      {
+        "src": "/api/articles/search",
+        "dest": "/api/articles/search.js"
+      },
+      {
+        "src": "/api/articles/createArticle",
+        "dest": "/api/articles/createArticle.js"
+      }
+    ]
+  }
+  
