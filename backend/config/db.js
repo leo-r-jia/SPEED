@@ -1,6 +1,11 @@
 const mongoose = require('mongoose');
 const config = require('config');
-const db = config.get('mongoURI');
+//const db = config.get('mongoURI');
+//const db = process.env.MONGODB_URI;
+
+const isLocal = process.env.VERCEL_ENV === 'development';
+const db = isLocal ? config.get('mongoURI') : process.env.MONGODB_URI;
+
 
 const connectDB = async () => {
     try {
@@ -19,4 +24,24 @@ const connectDB = async () => {
     }
 };
 
-module.exports = connectDB;
+let dbInstance = null;
+async function connectToDatabase() {
+    if(dbInstance) {
+        return dbInstance;
+    }
+
+    mongoose.set('strictQuery', true);
+    const connection = await mongoose.connect(db, {
+        useNewUrlParser: true,
+    });
+    dbInstance = connection;
+    return dbInstance;
+}
+
+module.exports = {
+    connectDB,
+    connectToDatabase
+};
+
+
+
