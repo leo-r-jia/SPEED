@@ -9,6 +9,13 @@ export interface Article extends Document {
   summary: string;
   linked_discussion: string;
   updated_date: Date;
+  ratings: number[];  // Array of individual ratings
+  averageRating: number; // Average of all ratings
+  totalRatings: number;  // Total number of ratings given
+  approved: boolean;
+  SE_practice: string;
+  claim: string;
+  evidence: string;
 }
 
 export const ArticleSchema = new Schema({
@@ -19,7 +26,14 @@ export const ArticleSchema = new Schema({
   doi: { type: String },
   summary: { type: String },
   linked_discussion: { type: String },
-  updated_date: { type: Date, default: Date.now }
+  updated_date: { type: Date, default: Date.now },
+  ratings: [Number], 
+  averageRating: { type: Number, default: 0 },
+  totalRatings: { type: Number, default: 0 },
+  approved: { type: Boolean, default: false }, // default to false if not provided
+  SE_practice: { type: String },
+  claim: { type: String },
+  evidence: { type: String }
 });
 
 export const ArticleModel = model<Article>('Article', ArticleSchema);
