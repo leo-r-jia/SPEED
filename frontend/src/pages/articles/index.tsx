@@ -1,6 +1,7 @@
 import { GetStaticProps, NextPage } from "next";
 import SortableTable from "../../components/table/SortableTable";
-import data from "../../utils/dummydata.json";
+import axios from "axios";
+import styles from "./Articles.module.scss";
 
 interface ArticlesInterface {
     id: string;
@@ -29,7 +30,7 @@ const Articles: NextPage<ArticlesProps> = ({ articles }) => {
     ];
 
     return (
-        <div className="container">
+        <div className={styles.container}>
             <h1>Articles Index Page</h1>
             <p>Page containing a table of articles:</p>
             <SortableTable headers={headers} data={articles} />
@@ -41,22 +42,28 @@ export const getStaticProps: GetStaticProps<ArticlesProps> = async (_) => {
 
     // Map the data to ensure all articles have consistent property names 
 
-    const articles = data.articles.map((article) => ({
-        id: article.id ?? article._id,
-        title: article.title,
-        authors: article.authors,
-        source: article.source,
-        pubyear: article.pubyear,
-        doi: article.doi,
-        claim: article.claim,
-        evidence: article.evidence,
-    }));
-
-    return {
-        props: {
+    try {
+        // Fetch articles from the API endpoint
+        const response = await axios.get(
+          "https://speed-backend-git-testing-leo-r-jia.vercel.app/api/articles"
+        );
+    
+        // Extract the articles from the API response data
+        const articles: ArticlesInterface[] = response.data;
+    
+        return {
+          props: {
             articles,
-        },
-    };
+          },
+        };
+      } catch (error) {
+        console.error("Error fetching data from the API:", error);
+        return {
+          props: {
+            articles: [],
+          },
+        };
+    }
 };
 
 
