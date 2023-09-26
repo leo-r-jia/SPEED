@@ -8,21 +8,40 @@ const NewDiscussion = () => {
     const [pubYear, setPubYear] = useState<number>(0);
     const [doi, setDoi] = useState("");
     const [summary, setSummary] = useState("");
-    const [linkedDiscussion, setLinkedDiscussion] = useState("");
+    const [method, setMethod] = useState("");
 
     const submitNewArticle = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        console.log(
-            JSON.stringify({
-                title,
-                authors,
-                source,
-                publication_year: pubYear,
-                doi,
-                summary,
-                linked_discussion: linkedDiscussion,
-            })
-        );
+        const articleData = {
+            title,
+            authors,
+            source,
+            publication_year: pubYear,
+            doi,
+            summary,
+            method
+        };
+
+        try {
+            const response = await fetch('https://speed-backend-git-testing-leo-r-jia.vercel.app/api/articles/createArticle', {
+                method: 'POST',
+                mode: 'cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(articleData),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to submit article.');
+            }
+
+            console.log('Article submitted successfully!');
+            // Reset form fields or provide feedback to the user
+        } catch (error) {
+            console.error('Error submitting article:', error);
+            // Handle errors or provide feedback to the user
+        }
     };
 
     // Some helper methods for the authors array 
@@ -58,7 +77,7 @@ const NewDiscussion = () => {
                         setTitle(event.target.value);
                     }}
                 />
-                
+
                 <label htmlFor="author">Authors:</label>
                 {authors.map((author, index) => {
                     return (
@@ -112,11 +131,7 @@ const NewDiscussion = () => {
                     value={pubYear}
                     onChange={(event) => {
                         const val = event.target.value;
-                        if (val === "") {
-                            setPubYear(0);
-                        } else {
-                            setPubYear(parseInt(val));
-                        }
+                        setPubYear(parseInt(val));
                     }}
                 />
 
@@ -138,6 +153,18 @@ const NewDiscussion = () => {
                     name="summary"
                     value={summary}
                     onChange={(event) => setSummary(event.target.value)}
+                />
+
+                <label htmlFor="method">Method/practice:</label>
+                <input
+                    className={formStyles.formItem}
+                    type="text"
+                    name="method"
+                    id="method"
+                    value={method}
+                    onChange={(event) => {
+                        setMethod(event.target.value);
+                    }}
                 />
 
                 <button className={formStyles.formItem} type="submit">
