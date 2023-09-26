@@ -19,12 +19,15 @@ const ModeratorSortableTable: React.FC<ModeratorSortableTableProps> = ({ headers
             {data.map((row, i) => (
                 <tr key={i}>
                     {headers.map((header) => (
-                        <td key={header.key}>{row[header.key]}</td>
+                        <td key={header.key} style={{ backgroundColor: row[header.key] === 'High' ? 'red' : 'white' }}>
+                            {row[header.key]}
+                        </td>
                     ))}
                 </tr>
             ))}
         </tbody>
     </table>
 );
+
 
 export default ModeratorSortableTable;
