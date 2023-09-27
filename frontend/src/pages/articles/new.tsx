@@ -1,5 +1,6 @@
 import { FormEvent, useState } from "react";
 import formStyles from "../../styles/Form.module.scss";
+import axios from 'axios';
 
 const NewDiscussion = () => {
     const [title, setTitle] = useState("");
@@ -8,7 +9,7 @@ const NewDiscussion = () => {
     const [pubYear, setPubYear] = useState<number>(0);
     const [doi, setDoi] = useState("");
     const [summary, setSummary] = useState("");
-    const [method, setMethod] = useState("");
+    const [SE_practice, setSePractice] = useState("");
 
     const submitNewArticle = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -19,29 +20,43 @@ const NewDiscussion = () => {
             publication_year: pubYear,
             doi,
             summary,
-            method
+            linked_discussion: "",
+            updated_date: "",
+            ratings: null,
+            average_rating: null,
+            total_ratings: 0,
+            approved: false,
+            SE_practice,
+            claim: null,
+            evidence: null,
         };
 
-        try {
-            const response = await fetch('https://speed-backend-git-testing-leo-r-jia.vercel.app/api/articles/createArticle', {
-                method: 'POST',
-                mode: 'cors',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(articleData),
+        // try {
+        //     const response = await fetch('https://speed-backend-git-testing-leo-r-jia.vercel.app/api/articles/createArticle', {
+        //         method: 'POST',
+        //         headers: {
+        //             'Content-Type': 'application/json',
+        //         },
+        //         body: JSON.stringify(articleData),
+        //     });
+        //     if (!response.ok) {
+        //         throw new Error('Failed to submit article.');
+        //     }
+        //     console.log('Article submitted successfully!');
+        //     // Reset form fields or provide feedback to the user
+        // } catch (error) {
+        //     console.error('Error submitting article:', error);
+        //     // Handle errors or provide feedback to the user
+        // }
+
+        axios
+            .post('https://speed-backend-git-testing-leo-r-jia.vercel.app/api/articles/createArticle', articleData)
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error);
             });
-
-            if (!response.ok) {
-                throw new Error('Failed to submit article.');
-            }
-
-            console.log('Article submitted successfully!');
-            // Reset form fields or provide feedback to the user
-        } catch (error) {
-            console.error('Error submitting article:', error);
-            // Handle errors or provide feedback to the user
-        }
     };
 
     // Some helper methods for the authors array 
@@ -161,9 +176,9 @@ const NewDiscussion = () => {
                     type="text"
                     name="method"
                     id="method"
-                    value={method}
+                    value={SE_practice}
                     onChange={(event) => {
-                        setMethod(event.target.value);
+                        setSePractice(event.target.value);
                     }}
                 />
 
