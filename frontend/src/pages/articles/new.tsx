@@ -31,32 +31,32 @@ const NewDiscussion = () => {
             evidence: null,
         };
 
-        // try {
-        //     const response = await fetch('https://speed-backend-git-testing-leo-r-jia.vercel.app/api/articles/createArticle', {
-        //         method: 'POST',
-        //         headers: {
-        //             'Content-Type': 'application/json',
-        //         },
-        //         body: JSON.stringify(articleData),
-        //     });
-        //     if (!response.ok) {
-        //         throw new Error('Failed to submit article.');
-        //     }
-        //     console.log('Article submitted successfully!');
-        //     // Reset form fields or provide feedback to the user
-        // } catch (error) {
-        //     console.error('Error submitting article:', error);
-        //     // Handle errors or provide feedback to the user
-        // }
-
-        axios
-            .post('https://speed-backend-git-testing-leo-r-jia.vercel.app/api/articles/createArticle', articleData)
-            .then(function (response) {
-                console.log(response);
-            })
-            .catch(function (error) {
-                console.log(error);
+        try {
+            const response = await fetch('https://speed-backend-git-testing-leo-r-jia.vercel.app/api/articles/createArticle', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(articleData),
             });
+            if (!response.ok) {
+                throw new Error('Failed to submit article.');
+            }
+            console.log('Article submitted successfully!');
+            // Reset form fields or provide feedback to the user
+        } catch (error) {
+            console.error('Error submitting article:', error);
+            // Handle errors or provide feedback to the user
+        }
+
+        // axios
+        //     .post('https://speed-backend-git-testing-leo-r-jia.vercel.app/api/articles/createArticle', articleData)
+        //     .then(function (response) {
+        //         console.log(response);
+        //     })
+        //     .catch(function (error) {
+        //         console.log(error);
+        //     });
     };
 
     // Some helper methods for the authors array 
