@@ -49,15 +49,6 @@ const NewDiscussion = () => {
             console.error('Error submitting article:', error);
             // Handle errors or provide feedback to the user
         }
-
-        // axios
-        //     .post('https://speed-backend-git-testing-leo-r-jia.vercel.app/api/articles/createArticle', articleData)
-        //     .then(function (response) {
-        //         console.log(response);
-        //     })
-        //     .catch(function (error) {
-        //         console.log(error);
-        //     });
     };
 
     // Some helper methods for the authors array 
