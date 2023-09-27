@@ -1,62 +1,106 @@
+// moderator.tsx
+
 import { GetStaticProps, NextPage } from "next";
 import data from "../../utils/dummydata.json";
 import ModeratorSortableTable from "../../components/table/ModeratorSortableTable";
+import { useState } from "react";
+import axios from "axios";
+import ColumnDropdown from "./ColumnDropdown"; // Import the custom dropdown
 
 interface ArticlesInterface {
-    id: string;
-    title: string;
-    authors: string;
-    source: string;
-    pubyear: string;
-    doi: string;
-    claim: string;
-    evidence: string;
+  id: string;
+  title: string;
+  authors: string;
+  source: string;
+  publication_year: string;
+  doi: string;
+  SE_practice: string; // Add SE Practice field
+  claim: string;
+  evidence: string; // Rename Evidence to Result of Evidence
 }
 
 type ArticlesProps = {
-    articles: ArticlesInterface[];
+  articles: ArticlesInterface[];
 };
 
 const Articles: NextPage<ArticlesProps> = ({ articles }) => {
-    const headers: { key: keyof ArticlesInterface; label: string }[] = [
-        { key: "title", label: "Title" },
-        { key: "authors", label: "Authors" },
-        { key: "source", label: "Source" },
-        { key: "pubyear", label: "Publication Year" },
-        { key: "doi", label: "DOI" },
-        { key: "claim", label: "Claim" },
-        { key: "evidence", label: "Evidence" },
-    ];
+  const headers: { key: keyof ArticlesInterface; label: string }[] = [
+    { key: "title", label: "Title" },
+    { key: "authors", label: "Authors" },
+    { key: "source", label: "Source" },
+    { key: "publication_year", label: "Publication Year" },
+    { key: "doi", label: "DOI" },
+    { key: "SE_practice", label: "SE Practice" }, // Add SE Practice column
+    { key: "claim", label: "Claim" },
+    { key: "evidence", label: "Result of Evidence" }, // Rename Evidence to Result of Evidence
+  ];
 
-    return (
-        <div className="container">
-            <h1>SPEED Moderator Dashboard</h1>
-            <p>Page containing a table of articles:</p>
-            <ModeratorSortableTable headers={headers} data={articles} />
-        </div>
-    );
+  const defaultColumnVisibility: Record<keyof ArticlesInterface, boolean> = {
+    id: true,
+    title: true,
+    authors: true,
+    source: true,
+    publication_year: true,
+    doi: true,
+    SE_practice: true,
+    claim: true,
+    evidence: true,
+  };
+
+  const [selectedColumns, setSelectedColumns] = useState<string[]>([
+    ...Object.keys(defaultColumnVisibility), // Include all default columns
+  ]);
+  
+  return (
+    <div className="container">
+      <h1>SPEED Moderator Dashboard</h1>
+
+      {/* Use the custom ColumnDropdown component */}
+      <ColumnDropdown
+        options={headers.map((header) => ({
+          key: header.key,
+          label: header.label,
+        }))}
+        selectedOptions={selectedColumns}
+        onSelect={(selected) => setSelectedColumns(selected)}
+      />
+
+      {/* Table with conditional column rendering */}
+      <ModeratorSortableTable
+        headers={headers.filter((header) => selectedColumns.includes(header.key))}
+        data={articles}
+      />
+    </div>
+  );
 };
 
 export const getStaticProps: GetStaticProps<ArticlesProps> = async (_) => {
 
     // Map the data to ensure all articles have consistent property names 
 
-    const articles = data.articles.map((article) => ({
-        id: article.id ?? article._id,
-        title: article.title,
-        authors: article.authors,
-        source: article.source,
-        pubyear: article.pubyear,
-        doi: article.doi,
-        claim: article.claim,
-        evidence: article.evidence,
-    }));
-
-    return {
-        props: {
+    try {
+        // Fetch articles from the API endpoint
+        const response = await axios.get(
+          "https://speed-backend-git-testing-leo-r-jia.vercel.app/api/articles"
+        );
+    
+        // Extract the articles from the API response data
+        const articles: ArticlesInterface[] = response.data;
+    
+        return {
+          props: {
             articles,
-        },
-    };
+          },
+        };
+      } catch (error) {
+        console.error("Error fetching data from the API:", error);
+        return {
+          props: {
+            articles: [],
+          },
+        };
+    }
 };
 
 export default Articles;
+
