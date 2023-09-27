@@ -1,0 +1,72 @@
+/* Inside your SCSS file */
+.myTable {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #ddd;
+  
+    th,
+    td {
+      width: 100px;
+      padding: 4px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+  
+      /* Define styles for sortable headers when not hovered */
+      &:not(.sorted) {
+        cursor: pointer; /* Change cursor style to pointer */
+      }
+  
+      /* Define styles for sortable headers when hovered or sorted */
+      &.sortable {
+        position: relative;
+        cursor: pointer;
+  
+        /* Add a visual indicator (e.g., an arrow) for hover and sorted */
+        &::after {
+          content: "";
+          display: inline-block;
+          width: 10px; /* Set a fixed width for the indicator */
+          height: 10px; /* Set a fixed height for the indicator */
+          border-left: 5px solid transparent;
+          border-right: 5px solid transparent;
+          border-bottom: 5px solid #333;
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          right: 5px; /* Adjust the position to align it with the header text */
+        }
+      }
+    }
+  
+    th {
+      background-color: #f2f2f2;
+      font-weight: bold;
+      color: #333;
+    }
+  
+    tr:nth-child(even) {
+      background-color: #f2f2f2;
+    }
+  
+    tr:hover {
+      background-color: #ddd;
+    }
+
+    th:nth-child(8), td:nth-child(8) {
+    width: 10px; /* Set the width of the second column to 50px */
+  }
+  
+    /* Add more styles as needed */
+  
+    /* Example: Style specific headers or cells */
+    th.averageRating {
+      /* Styles for the 'key' header */
+      width: 10px;
+    }
+  
+    td.averageRating {
+      /* Styles for the 'key' cells */
+      width: 10px;
+    }
+  }
+  

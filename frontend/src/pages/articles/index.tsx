@@ -3,15 +3,17 @@ import SortableTable from "../../components/table/SortableTable";
 import axios from "axios";
 import styles from "./Articles.module.scss";
 
+
 interface ArticlesInterface {
     id: string;
     title: string;
     authors: string;
     source: string;
-    pubyear: string;
+    publication_year: string;
     doi: string;
+    SE_practice: string;
     claim: string;
-    evidence: string;
+    averageRating: string;
 }
 
 type ArticlesProps = {
@@ -23,16 +25,17 @@ const Articles: NextPage<ArticlesProps> = ({ articles }) => {
         { key: "title", label: "Title" },
         { key: "authors", label: "Authors" },
         { key: "source", label: "Source" },
-        { key: "pubyear", label: "Publication Year" },
+        { key: "publication_year", label: "Publication Year" },
         { key: "doi", label: "DOI" },
+        { key: "SE_practice", label: "SE Practice" },
         { key: "claim", label: "Claim" },
-        { key: "evidence", label: "Evidence" },
+        { key: "averageRating", label: "Rating" },
     ];
 
     return (
         <div className={styles.container}>
-            <h1>Articles Index Page</h1>
-            <p>Page containing a table of articles:</p>
+            <h1>SPEED Articles</h1>
+            <p>Search Placeholder</p>
             <SortableTable headers={headers} data={articles} />
         </div>
     );
