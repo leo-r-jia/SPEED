@@ -5,7 +5,7 @@ import data from "../../utils/dummydata.json";
 import ModeratorSortableTable from "../../components/table/ModeratorSortableTable";
 import { useState } from "react";
 import axios from "axios";
-import ColumnDropdown from "./ColumnDropdown"; // Import the custom dropdown
+import ColumnDropdown from "./ColumnDropdown"; 
 
 interface ArticlesInterface {
   id: string;
@@ -14,9 +14,9 @@ interface ArticlesInterface {
   source: string;
   publication_year: string;
   doi: string;
-  SE_practice: string; // Add SE Practice field
+  SE_practice: string; 
   claim: string;
-  evidence: string; // Rename Evidence to Result of Evidence
+  evidence: string; 
 }
 
 type ArticlesProps = {
@@ -30,9 +30,9 @@ const Articles: NextPage<ArticlesProps> = ({ articles }) => {
     { key: "source", label: "Source" },
     { key: "publication_year", label: "Publication Year" },
     { key: "doi", label: "DOI" },
-    { key: "SE_practice", label: "SE Practice" }, // Add SE Practice column
+    { key: "SE_practice", label: "SE Practice" }, 
     { key: "claim", label: "Claim" },
-    { key: "evidence", label: "Result of Evidence" }, // Rename Evidence to Result of Evidence
+    { key: "evidence", label: "Result of Evidence" },
   ];
 
   const defaultColumnVisibility: Record<keyof ArticlesInterface, boolean> = {
@@ -48,14 +48,13 @@ const Articles: NextPage<ArticlesProps> = ({ articles }) => {
   };
 
   const [selectedColumns, setSelectedColumns] = useState<string[]>([
-    ...Object.keys(defaultColumnVisibility), // Include all default columns
+    ...Object.keys(defaultColumnVisibility), 
   ]);
   
   return (
     <div className="container">
       <h1>SPEED Moderator Dashboard</h1>
 
-      {/* Use the custom ColumnDropdown component */}
       <ColumnDropdown
         options={headers.map((header) => ({
           key: header.key,
@@ -65,7 +64,6 @@ const Articles: NextPage<ArticlesProps> = ({ articles }) => {
         onSelect={(selected) => setSelectedColumns(selected)}
       />
 
-      {/* Table with conditional column rendering */}
       <ModeratorSortableTable
         headers={headers.filter((header) => selectedColumns.includes(header.key))}
         data={articles}
