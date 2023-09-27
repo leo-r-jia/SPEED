@@ -21,7 +21,7 @@ const NewDiscussion = () => {
             doi,
             summary,
             linked_discussion: "",
-            updated_date: "",
+            updated_date: null,
             ratings: null,
             average_rating: null,
             total_ratings: 0,
@@ -36,6 +36,7 @@ const NewDiscussion = () => {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Accept': 'application/json'
                 },
                 body: JSON.stringify(articleData),
             });
