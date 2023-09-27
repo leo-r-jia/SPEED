@@ -13,6 +13,7 @@
 .formTextArea {
     @extend .formItem;
     min-height: 8em;
+    resize: vertical;
 }
 
 .arrayItem {

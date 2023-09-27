@@ -9,6 +9,7 @@ const NewDiscussion = () => {
     const [doi, setDoi] = useState("");
     const [summary, setSummary] = useState("");
     const [SE_practice, setSePractice] = useState("");
+    const [claim, setClaim] = useState("");
 
     const submitNewArticle = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -170,6 +171,18 @@ const NewDiscussion = () => {
                     value={SE_practice}
                     onChange={(event) => {
                         setSePractice(event.target.value);
+                    }}
+                />
+
+                <label htmlFor="method">Claim:</label>
+                <input
+                    className={formStyles.formItem}
+                    type="text"
+                    name="method"
+                    id="method"
+                    value={claim}
+                    onChange={(event) => {
+                        setClaim(event.target.value);
                     }}
                 />
 
