@@ -30,7 +30,7 @@ const NewDiscussion = () => {
     
         // Hardcoded article data
         const articleData = {
-            title: "CORS TESTING",
+            title: "REJECTED ARTCILE TEST",
             authors: ["Author 1", "Author 2"],
             source: "Example Source",
             publication_year: 2023,

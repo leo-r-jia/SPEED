@@ -13,7 +13,6 @@ export default async (req, res) => {
         return;
     }
 
-
     if(req.method !== 'POST') {
         return res.status(405).send('Method Not Allowed');
     }
@@ -37,6 +36,6 @@ export default async (req, res) => {
 
     res.json({
         success:true,
-        approval: article.rejected
+        rejected: article.rejected
     });
 };
