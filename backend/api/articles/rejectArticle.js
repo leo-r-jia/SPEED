@@ -32,11 +32,11 @@ export default async (req, res) => {
         return res.status(404).send('Article not found.');
     }
 
-    article.approved = approval;
+    article.rejected = approval;
     await article.save();
 
     res.json({
         success:true,
-        approval: article.approved
+        approval: article.rejected
     });
 };
