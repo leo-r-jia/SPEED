@@ -33,6 +33,7 @@ export default async (req, res) => {
     }
 
     article.approved = approved;
+    article.rejected = false;
     await article.save();
 
     res.json({
