@@ -1,8 +1,7 @@
 // ColumnDropdown.tsx
 
 import React, { useState } from "react";
-import styles from './ColumnDropdown.module.scss'; // Import the SCSS module
-
+import styles from './ColumnDropdown.module.scss'; 
 
 interface ColumnOption {
   key: string;
@@ -21,11 +20,11 @@ const ColumnDropdown: React.FC<ColumnDropdownProps> = ({
     onSelect,
   }) => {
     const [isOpen, setIsOpen] = useState(false);
-  
+
     const toggleDropdown = () => {
       setIsOpen(!isOpen);
     };
-  
+
     const toggleOption = (optionKey: string) => {
       const updatedSelected = selectedOptions.includes(optionKey)
         ? selectedOptions.filter((key) => key !== optionKey)
@@ -33,31 +32,45 @@ const ColumnDropdown: React.FC<ColumnDropdownProps> = ({
   
       onSelect(updatedSelected);
     };
-  
+
+    const moveOption = (index: number, direction: number) => {
+      const newSelectedOptions = [...selectedOptions];
+      const temp = newSelectedOptions[index];
+      newSelectedOptions[index] = newSelectedOptions[index + direction];
+      newSelectedOptions[index + direction] = temp;
+      onSelect(newSelectedOptions);
+    };
+
     return (
-<div className={`${styles["column-dropdown"]} ${isOpen ? styles["open"] : ""}`}>
-  <div className={styles["dropdown-toggle"]} onClick={toggleDropdown}>
-    Select Columns
-  </div>
-  {isOpen && (
-    <ul className={styles["dropdown-options"]}>
-      {options.map((option) => (
-        <li
-          key={option.key}
-          onClick={() => toggleOption(option.key)}
-          className={`${selectedOptions.includes(option.key) ? styles["selected"] : ""}`}
-        >
-          {option.label}
-          {selectedOptions.includes(option.key) && (
-            <span className={styles["checkmark"]}>&#10003;</span>
-          )}
-        </li>
-      ))}
-    </ul>
-  )}
-</div>
+      <div className={`${styles["column-dropdown"]} ${isOpen ? styles["open"] : ""}`}>
+        <div className={styles["dropdown-toggle"]} onClick={toggleDropdown}>
+          Select Columns
+        </div>
+        {isOpen && (
+          <ul className={styles["dropdown-options"]}>
+            {options.map((option, index) => (
+              <li
+                key={option.key}
+                className={`${selectedOptions.includes(option.key) ? styles["selected"] : ""}`}
+              >
+                <div onClick={() => toggleOption(option.key)}>
+                  {option.label}
+                  {selectedOptions.includes(option.key) && (
+                    <span className={styles["checkmark"]}>&#10003;</span>
+                  )}
+                </div>
+                {selectedOptions.includes(option.key) && (
+                  <div>
+                    <button disabled={index === 0} onClick={() => moveOption(index, -1)}>Up</button>
+                    <button disabled={index === selectedOptions.length - 1} onClick={() => moveOption(index, 1)}>Down</button>
+                  </div>
+                )}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     );
   };
   
-  export default ColumnDropdown;
-
+export default ColumnDropdown;
