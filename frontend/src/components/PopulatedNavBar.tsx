@@ -16,6 +16,12 @@ const PopulatedNavBar = () => {
 
             <NavItem>SPEED</NavItem>
 
+            <NavItem route="/articles/moderator" end>
+                
+                Moderator View
+            
+            </NavItem>
+
             <NavItem route="/" end>
 
                 Home
