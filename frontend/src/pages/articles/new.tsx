@@ -89,8 +89,8 @@ const NewDiscussion = () => {
 
     // Return the full form 
     return (
-        <div className="container">
-            <h1>New Article</h1>
+        <div className={formStyles.container}>
+            <h1>Submit a New Article</h1>
             <form className={formStyles.form} onSubmit={submitNewArticle}>
                 <label htmlFor="title">Title:</label>
                 <input
