@@ -5,7 +5,8 @@ import data from "../../utils/dummydata.json";
 import ModeratorSortableTable from "../../components/table/ModeratorSortableTable";
 import { useState } from "react";
 import axios from "axios";
-import ColumnDropdown from "./ColumnDropdown"; 
+import ColumnDropdown from "./ColumnDropdown";
+import styles from "./Moderator.module.scss";
 
 interface ArticlesInterface {
   id: string;
@@ -49,7 +50,7 @@ const Articles: NextPage<ArticlesProps> = ({ articles }) => {
   ];
 
   return (
-    <div className="container">
+    <div className={styles.container}>
       <h1>SPEED Moderator Dashboard</h1>
       
       <ColumnDropdown
