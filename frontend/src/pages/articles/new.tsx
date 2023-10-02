@@ -8,7 +8,8 @@ const NewDiscussion = () => {
     const [pubYear, setPubYear] = useState<number>(0);
     const [doi, setDoi] = useState("");
     const [summary, setSummary] = useState("");
-    const [linkedDiscussion, setLinkedDiscussion] = useState("");
+    const [SE_practice, setSePractice] = useState("");
+    const [claim, setClaim] = useState("");
 
     // const submitNewArticle = async (event: FormEvent<HTMLFormElement>) => {
     //     event.preventDefault();
@@ -27,38 +28,42 @@ const NewDiscussion = () => {
 
     const submitNewArticle = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-    
-        // Hardcoded article data
+      
         const articleData = {
-            title: "REJECTED ARTCILE TEST",
-            authors: ["Author 1", "Author 2"],
-            source: "Example Source",
-            publication_year: 2023,
-            doi: "Example DOI",
-            summary: "Example Summary",
-            linked_discussion: "Example Linked Discussion",
-            SE_practice: "Example Practice",
-            claim: "Example Claim",
-            evidence: "Example Evidence"
+            title,
+            authors,
+            source,
+            publication_year: pubYear,
+            doi,
+            summary,
+            linked_discussion: "",
+            updated_date: null,
+            ratings: null,
+            average_rating: null,
+            total_ratings: 0,
+            approved: false,
+            SE_practice,
+            claim: null,
+            evidence: null,
         };
-    
+
         try {
             const response = await fetch('https://speed-backend-git-testing-leo-r-jia.vercel.app/api/articles/createArticle', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
                 },
-                body: JSON.stringify(articleData)
+                body: JSON.stringify(articleData),
             });
-    
-            const responseData = await response.json();
-            console.log(responseData); // Log the response data for debugging
-    
-            // Additional logic to handle response (e.g., show success message, navigate, etc.)
-    
+            if (!response.ok) {
+                throw new Error('Failed to submit article.');
+            }
+            console.log('Article submitted successfully!');
+            // Reset form fields or provide feedback to the user
         } catch (error) {
-            console.error("Error submitting the article:", error);
-            // Handle error (e.g., show an error message to the user)
+            console.error('Error submitting article:', error);
+            // Handle errors or provide feedback to the user
         }
     };
     
@@ -97,7 +102,7 @@ const NewDiscussion = () => {
                         setTitle(event.target.value);
                     }}
                 />
-                
+
                 <label htmlFor="author">Authors:</label>
                 {authors.map((author, index) => {
                     return (
@@ -151,11 +156,7 @@ const NewDiscussion = () => {
                     value={pubYear}
                     onChange={(event) => {
                         const val = event.target.value;
-                        if (val === "") {
-                            setPubYear(0);
-                        } else {
-                            setPubYear(parseInt(val));
-                        }
+                        setPubYear(parseInt(val));
                     }}
                 />
 
@@ -177,6 +178,30 @@ const NewDiscussion = () => {
                     name="summary"
                     value={summary}
                     onChange={(event) => setSummary(event.target.value)}
+                />
+
+                <label htmlFor="method">Method/practice:</label>
+                <input
+                    className={formStyles.formItem}
+                    type="text"
+                    name="method"
+                    id="method"
+                    value={SE_practice}
+                    onChange={(event) => {
+                        setSePractice(event.target.value);
+                    }}
+                />
+
+                <label htmlFor="method">Claim:</label>
+                <input
+                    className={formStyles.formItem}
+                    type="text"
+                    name="method"
+                    id="method"
+                    value={claim}
+                    onChange={(event) => {
+                        setClaim(event.target.value);
+                    }}
                 />
 
                 <button className={formStyles.formItem} type="submit">
