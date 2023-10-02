@@ -1,7 +1,24 @@
+.container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.container label,
+.container h1 {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #2b2b2b;
+}
+
+.container h1 {
+    font-size: 1.5em;
+}
+
 .form {
     display: flex;
     flex-direction: column;
-    max-width: 30em;
+    max-width: 50em;
+    min-width: 40em;
 }
 
 .formItem {
@@ -14,6 +31,39 @@
     @extend .formItem;
     min-height: 8em;
     resize: vertical;
+}
+
+.container input,
+.container .formTextArea {
+    border: 1px #808080 solid;
+    border-radius: 0.5rem;
+    border: none none;
+}
+
+.container input:hover,
+.container .formTextArea:hover {
+    background-color: #00000010;
+    border-color: #3c4170;
+    transition: all 0.3s;
+}
+
+.container button {
+    border: 1px #808080 solid;
+    border-radius: 0.5rem;
+}
+
+.container button:hover {
+    background-color: #00000023;
+    border-color: #3c4170;
+    transition: all 0.3s;
+    cursor: pointer;
+}
+
+.container input:active,
+.container .formTextArea:active {
+    border-color: none;
+    border-color: rgb(240, 13, 13);
+    transition: all 0.3s ease-in-out;
 }
 
 .arrayItem {
