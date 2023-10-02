@@ -28,8 +28,9 @@ type ArticlesProps = {
 const Articles: NextPage<ArticlesProps> = ({ articles }) => {
   const approvedArticles = articles.filter(article => article.approved === true);
   const rejectedArticles = articles.filter(article => article.rejected === true);
+  const submittedArticles = articles.filter(article => !article.approved && !article.rejected);
 
-  const [activeTab, setActiveTab] = useState('approved');
+  const [activeTab, setActiveTab] = useState('submitted');
   
   const [selectedColumns, setSelectedColumns] = useState<string[]>([
     "id", "title", "authors", "source", "publication_year", 
@@ -60,31 +61,38 @@ const Articles: NextPage<ArticlesProps> = ({ articles }) => {
         onSelect={(selected) => setSelectedColumns(selected)}
       />
       
+      <button onClick={() => setActiveTab('submitted')}>Submitted</button>
       <button onClick={() => setActiveTab('approved')}>Approved</button>
       <button onClick={() => setActiveTab('rejected')}>Rejected</button>
+      <button onClick={() => setActiveTab('all')}>All</button>
   
-      {activeTab === 'approved' && (
-        <div>
-          {/* ... other components for approved articles */}
-          <ModeratorSortableTable
-            headers={headers.filter((header) => selectedColumns.includes(header.key))}
-            data={approvedArticles}
-          />
-        </div>
+      {activeTab === 'submitted' && (
+        <ModeratorSortableTable
+          headers={headers.filter((header) => selectedColumns.includes(header.key))}
+          data={submittedArticles}
+        />
       )}
-      
+      {activeTab === 'approved' && (
+        <ModeratorSortableTable
+          headers={headers.filter((header) => selectedColumns.includes(header.key))}
+          data={approvedArticles}
+        />
+      )}
       {activeTab === 'rejected' && (
-        <div>
-          {/* ... other components for rejected articles */}
-          <ModeratorSortableTable
-            headers={headers.filter((header) => selectedColumns.includes(header.key))}
-            data={rejectedArticles}
-          />
-        </div>
+        <ModeratorSortableTable
+          headers={headers.filter((header) => selectedColumns.includes(header.key))}
+          data={rejectedArticles}
+        />
+      )}
+      {activeTab === 'all' && (
+        <ModeratorSortableTable
+          headers={headers.filter((header) => selectedColumns.includes(header.key))}
+          data={articles}
+        />
       )}
     </div>
   );
-      };
+};
 
 export const getStaticProps: GetStaticProps<ArticlesProps> = async (_) => {
 
