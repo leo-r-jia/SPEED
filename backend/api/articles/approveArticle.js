@@ -18,10 +18,10 @@ export default async (req, res) => {
         return res.status(405).send('Method Not Allowed');
     }
 
-    const { approval } = req.body;
+    const { approved } = req.body;
     const _id = req.query._id;
 
-    if(!approval || typeof approval !== 'boolean') {
+    if(!approved || typeof approved !== 'boolean') {
         return res.status(400).send('Invalid input. True or false');
     }
 
@@ -32,7 +32,7 @@ export default async (req, res) => {
         return res.status(404).send('Article not found.');
     }
 
-    article.approved = approval;
+    article.approved = approved;
     await article.save();
 
     res.json({
