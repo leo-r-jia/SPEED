@@ -13,6 +13,7 @@ export interface Article extends Document {
   averageRating: number; // Average of all ratings
   totalRatings: number;  // Total number of ratings given
   approved: boolean;
+  rejected: boolean;
   SE_practice: string;
   claim: string;
   evidence: string;
@@ -31,6 +32,7 @@ export const ArticleSchema = new Schema({
   averageRating: { type: Number, default: 0 },
   totalRatings: { type: Number, default: 0 },
   approved: { type: Boolean, default: false }, // default to false if not provided
+  rejected: { type: Boolean, default: false }, // default to false if not provided
   SE_practice: { type: String },
   claim: { type: String },
   evidence: { type: String }
