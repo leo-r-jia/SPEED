@@ -11,8 +11,24 @@ const NewDiscussion = () => {
     const [SE_practice, setSePractice] = useState("");
     const [claim, setClaim] = useState("");
 
+    // const submitNewArticle = async (event: FormEvent<HTMLFormElement>) => {
+    //     event.preventDefault();
+    //     console.log(
+    //         JSON.stringify({
+    //             title,
+    //             authors,
+    //             source,
+    //             publication_year: pubYear,
+    //             doi,
+    //             summary,
+    //             linked_discussion: linkedDiscussion,
+    //         })
+    //     );
+    // };
+
     const submitNewArticle = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+      
         const articleData = {
             title,
             authors,
@@ -51,6 +67,8 @@ const NewDiscussion = () => {
             // Handle errors or provide feedback to the user
         }
     };
+    
+
 
     // Some helper methods for the authors array 
     const addAuthor = () => {
