@@ -16,7 +16,9 @@ interface ArticlesInterface {
   doi: string;
   SE_practice: string; 
   claim: string;
-  evidence: string; 
+  evidence: string;
+  approved: boolean;
+  rejected: boolean;
 }
 
 type ArticlesProps = {
@@ -24,6 +26,16 @@ type ArticlesProps = {
 };
 
 const Articles: NextPage<ArticlesProps> = ({ articles }) => {
+  const approvedArticles = articles.filter(article => article.approved === true);
+  const rejectedArticles = articles.filter(article => article.rejected === true);
+
+  const [activeTab, setActiveTab] = useState('approved');
+  
+  const [selectedColumns, setSelectedColumns] = useState<string[]>([
+    "id", "title", "authors", "source", "publication_year", 
+    "doi", "SE_practice", "claim", "evidence", "approved", "rejected"
+  ]);
+
   const headers: { key: keyof ArticlesInterface; label: string }[] = [
     { key: "title", label: "Title" },
     { key: "authors", label: "Authors" },
@@ -35,26 +47,10 @@ const Articles: NextPage<ArticlesProps> = ({ articles }) => {
     { key: "evidence", label: "Result of Evidence" },
   ];
 
-  const defaultColumnVisibility: Record<keyof ArticlesInterface, boolean> = {
-    id: true,
-    title: true,
-    authors: true,
-    source: true,
-    publication_year: true,
-    doi: true,
-    SE_practice: true,
-    claim: true,
-    evidence: true,
-  };
-
-  const [selectedColumns, setSelectedColumns] = useState<string[]>([
-    ...Object.keys(defaultColumnVisibility), 
-  ]);
-  
   return (
     <div className="container">
       <h1>SPEED Moderator Dashboard</h1>
-
+      
       <ColumnDropdown
         options={headers.map((header) => ({
           key: header.key,
@@ -63,14 +59,32 @@ const Articles: NextPage<ArticlesProps> = ({ articles }) => {
         selectedOptions={selectedColumns}
         onSelect={(selected) => setSelectedColumns(selected)}
       />
-
-      <ModeratorSortableTable
-        headers={headers.filter((header) => selectedColumns.includes(header.key))}
-        data={articles}
-      />
+      
+      <button onClick={() => setActiveTab('approved')}>Approved</button>
+      <button onClick={() => setActiveTab('rejected')}>Rejected</button>
+  
+      {activeTab === 'approved' && (
+        <div>
+          {/* ... other components for approved articles */}
+          <ModeratorSortableTable
+            headers={headers.filter((header) => selectedColumns.includes(header.key))}
+            data={approvedArticles}
+          />
+        </div>
+      )}
+      
+      {activeTab === 'rejected' && (
+        <div>
+          {/* ... other components for rejected articles */}
+          <ModeratorSortableTable
+            headers={headers.filter((header) => selectedColumns.includes(header.key))}
+            data={rejectedArticles}
+          />
+        </div>
+      )}
     </div>
   );
-};
+      };
 
 export const getStaticProps: GetStaticProps<ArticlesProps> = async (_) => {
 
@@ -101,4 +115,3 @@ export const getStaticProps: GetStaticProps<ArticlesProps> = async (_) => {
 };
 
 export default Articles;
-
