@@ -42,6 +42,7 @@ const NewDiscussion = () => {
             average_rating: null,
             total_ratings: 0,
             approved: false,
+            rejected: false,
             SE_practice,
             claim: null,
             evidence: null,
