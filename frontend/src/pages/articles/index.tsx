@@ -10,7 +10,9 @@ interface ArticlesInterface {
     source: string;
     publication_year: string;
     doi: string;
+    SE_practice: string;
     claim: string;
+    averageRating: string;
 }
 
 type ArticlesProps = {
@@ -24,11 +26,13 @@ const Articles: NextPage<ArticlesProps> = ({ articles }) => {
         { key: "source", label: "Source" },
         { key: "publication_year", label: "Publication Year" },
         { key: "doi", label: "DOI" },
+        { key: "SE_practice", label: "SE Practice" },
         { key: "claim", label: "Claim" },
+        { key: "averageRating", label: "Rating" },
     ];
 
     return (
-        <div>
+        <div className={styles.container}>
             <h1>SPEED Articles</h1>
             <p>Search Placeholder</p>
             <SortableTable headers={headers} data={articles} />
