@@ -1,20 +1,24 @@
 import { GetStaticProps, NextPage } from "next";
 import SortableTable from "../../components/table/SortableTable";
-import data from "../../utils/dummydata.json";
+import axios from "axios";
+import styles from "./UserView.module.scss";
+
 
 interface ArticlesInterface {
     id: string;
     title: string;
     authors: string;
     source: string;
-    pubyear: string;
+    publication_year: string;
     doi: string;
+    SE_practice: string;
     claim: string;
-    evidence: string;
+    averageRating: string;
+    approved: boolean;
 }
 
 type ArticlesProps = {
-    articles: ArticlesInterface[];
+  articles: ArticlesInterface[];
 };
 
 const Articles: NextPage<ArticlesProps> = ({ articles }) => {
@@ -22,42 +26,48 @@ const Articles: NextPage<ArticlesProps> = ({ articles }) => {
         { key: "title", label: "Title" },
         { key: "authors", label: "Authors" },
         { key: "source", label: "Source" },
-        { key: "pubyear", label: "Publication Year" },
+        { key: "publication_year", label: "Publication Year" },
         { key: "doi", label: "DOI" },
+        { key: "SE_practice", label: "SE Practice" },
         { key: "claim", label: "Claim" },
-        { key: "evidence", label: "Evidence" },
+        { key: "averageRating", label: "Rating" },
     ];
 
     return (
-        <div className="container">
-            <h1>Articles Index Page</h1>
-            <p>Page containing a table of articles:</p>
+        <div className={styles.container}>
+            <h1>SPEED Articles</h1>
+            <p>Search Placeholder</p>
             <SortableTable headers={headers} data={articles} />
         </div>
     );
 };
 
 export const getStaticProps: GetStaticProps<ArticlesProps> = async (_) => {
+  try {
+    // Fetch articles from the API endpoint
+    const response = await axios.get("https://speed-backend-git-testing-leo-r-jia.vercel.app/api/articles");
 
-    // Map the data to ensure all articles have consistent property names 
+    // Extract the articles from the API response data
+    const articles: ArticlesInterface[] = response.data;
 
-    const articles = data.articles.map((article) => ({
-        id: article.id ?? article._id,
-        title: article.title,
-        authors: article.authors,
-        source: article.source,
-        pubyear: article.pubyear,
-        doi: article.doi,
-        claim: article.claim,
-        evidence: article.evidence,
-    }));
+    // Filter the articles to only include approved ones
+    const approvedArticles = articles.filter((article) => article.approved === true);
 
     return {
-        props: {
-            articles,
-        },
+      props: {
+        articles: approvedArticles,
+      },
     };
+  } catch (error) {
+    console.error("Error fetching data from the API:", error);
+    return {
+      props: {
+        articles: [],
+      },
+    };
+  }
 };
+
 
 
 

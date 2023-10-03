@@ -1,0 +1,63 @@
+.column-dropdown {
+    position: relative;
+    display: inline-block;
+    width: 200px; /* Set the width to your desired value */
+    font-size: 16px; /* Increase the font size for better visibility */
+  
+    .dropdown-toggle {
+      cursor: pointer;
+      padding: 12px; /* Increase the padding for better clickability */
+      border: 1px solid #ccc;
+      border-radius: 4px;
+  
+      &.open {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+      }
+    }
+  
+    .dropdown-options {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      z-index: 1;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-top: none;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      max-height: 200px; /* Increase the max-height for a larger dropdown */
+      overflow-y: auto;
+  
+      li {
+        padding: 12px; /* Increase the padding for better clickability */
+        cursor: pointer;
+        user-select: none;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+  
+        &.selected {
+          background-color: #e1e1e1;
+  
+          .checkmark {
+            color: black; /* Change the checkmark color to black */
+          }
+        }
+  
+        .checkmark {
+          color: black; /* Checkmark color */
+          font-size: 18px;
+          margin-left: 5px;
+        }
+      }
+  
+      &.open {
+        .checkmark {
+          display: inline; /* Display the checkmark when the option is selected */
+        }
+      }
+    }
+  }
+  

@@ -1,43 +1,27 @@
-import { IoMdArrowDropdown } from "react-icons/io";
-
 import NavBar from "./nav/NavBar";
-
-import NavDropdown from "./nav/NavDropdown";
-
 import NavItem from "./nav/NavItem";
-
-
+import styles from "./PopulatedNavBar.module.scss";
 
 const PopulatedNavBar = () => {
 
     return (
-
         <NavBar>
-
-            <NavItem>SPEED</NavItem>
-
-            <NavItem route="/" end>
-
+            <div className={styles.heading}>
+                <NavItem route="/">SPEED</NavItem>
+            </div>
+            <NavItem route="/">
                 Home
-
             </NavItem>
-
-            <NavItem dropdown route="/articles">
-
-                Articles <IoMdArrowDropdown />
-
-                <NavDropdown>
-
-                    <NavItem route="/articles">View articles</NavItem>
-
-                    <NavItem route="/articles/new">Submit new</NavItem>
-
-                </NavDropdown>
-
+            <NavItem route="/articles/new">
+                Submit New Article
             </NavItem>
-
+            <NavItem route="/articles/moderator">
+                Moderator View
+            </NavItem>
+            <NavItem route="/articles">
+                User View
+            </NavItem>
         </NavBar>
-
     );
 
 };
