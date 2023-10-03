@@ -1,5 +1,5 @@
-import { useState } from "react";
-import styles from "./ColumnDropdown.module.scss";
+import React, { useState } from "react";
+import styles from './ColumnDropdown.module.scss'; // Import the SCSS module
 
 
 interface ColumnOption {
