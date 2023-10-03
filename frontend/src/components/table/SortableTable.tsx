@@ -9,11 +9,8 @@ interface SortableTableProps {
 }
 
 const convertRatingToStars = (rating: number) => {
-  const stars = [];
-  for (let i = 0; i < rating; i++) {
-    stars.push(<span key={i}>&#9733;</span>); // Unicode character for a star
-  }
-  return stars;
+  // Returns Rating component
+  return (<Rating name="read-only" value={rating} precision={0.5} size="small" readOnly />);
 };
 
 const formatAuthors = (authors: string[]) => {
@@ -40,8 +37,8 @@ const SortableTable: React.FC<SortableTableProps> = ({ headers, data }) => {
       );
       // Log the response for debugging
       console.log('Rating Response:', response);
-      // Update the article in the state with the data returned by the server
-      // data[index] = response.data;
+
+      // Close the rating submission
       setExpandedRowIndex(null);
       setValue(0);
     } catch (error) {
@@ -134,7 +131,6 @@ const SortableTable: React.FC<SortableTableProps> = ({ headers, data }) => {
                   <div className={styles.submitRating}>
                     <Rating
                       value={value}
-                      precision={0.5}
                       onChange={(event, newValue) => {
                         setValue(newValue);
                       }}
