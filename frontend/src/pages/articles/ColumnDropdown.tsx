@@ -13,48 +13,16 @@ interface ColumnDropdownProps {
 }
 
 const ColumnDropdown: React.FC<ColumnDropdownProps> = ({
-    options,
-    selectedOptions,
-    onSelect,
-  }) => {
-    const [isOpen, setIsOpen] = useState(false);
-  
-    const toggleDropdown = () => {
-      setIsOpen(!isOpen);
-    };
-  
-    const toggleOption = (optionKey: string) => {
-      const updatedSelected = selectedOptions.includes(optionKey)
-        ? selectedOptions.filter((key) => key !== optionKey)
-        : [...selectedOptions, optionKey];
-  
-      onSelect(updatedSelected);
-    };
-  
-    return (
-<div className={`${styles["column-dropdown"]} ${isOpen ? styles["open"] : ""}`}>
-  <div className={styles["dropdown-toggle"]} onClick={toggleDropdown}>
-    Select Columns
-  </div>
-  {isOpen && (
-    <ul className={styles["dropdown-options"]}>
-      {options.map((option) => (
-        <li
-          key={option.key}
-          onClick={() => toggleOption(option.key)}
-          className={`${selectedOptions.includes(option.key) ? styles["selected"] : ""}`}
-        >
-          {option.label}
-          {selectedOptions.includes(option.key) && (
-            <span className={styles["checkmark"]}>&#10003;</span>
-          )}
-        </li>
-      ))}
-    </ul>
-  )}
-</div>
-    );
+  options,
+  selectedOptions,
+  onSelect,
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleDropdown = () => {
+    setIsOpen(!isOpen);
   };
+
   const toggleOption = (optionKey: string) => {
     const updatedSelected = selectedOptions.includes(optionKey)
       ? selectedOptions.filter((key) => key !== optionKey)
@@ -73,14 +41,13 @@ const ColumnDropdown: React.FC<ColumnDropdownProps> = ({
           {options.map((option) => (
             <li
               key={option.key}
+              onClick={() => toggleOption(option.key)}
               className={`${selectedOptions.includes(option.key) ? styles["selected"] : ""}`}
             >
-              <div onClick={() => toggleOption(option.key)}>
-                {option.label}
-                {selectedOptions.includes(option.key) && (
-                  <span className={styles["checkmark"]}>&#10003;</span>
-                )}
-              </div>
+              {option.label}
+              {selectedOptions.includes(option.key) && (
+                <span className={styles["checkmark"]}>&#10003;</span>
+              )}
             </li>
           ))}
         </ul>
@@ -89,3 +56,4 @@ const ColumnDropdown: React.FC<ColumnDropdownProps> = ({
   );
 };
 
+export default ColumnDropdown;
