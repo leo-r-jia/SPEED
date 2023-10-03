@@ -41,8 +41,9 @@ const SortableTable: React.FC<SortableTableProps> = ({ headers, data }) => {
       // Log the response for debugging
       console.log('Rating Response:', response);
       // Update the article in the state with the data returned by the server
-      data[index] = response.data;
+      // data[index] = response.data;
       setExpandedRowIndex(null);
+      setValue(0);
     } catch (error) {
       // Log the error for debugging
       console.error('Rating Error:', error);
@@ -111,7 +112,10 @@ const SortableTable: React.FC<SortableTableProps> = ({ headers, data }) => {
           <React.Fragment key={i}>
             <tr
               key={i}
-              onClick={() => setExpandedRowIndex(expandedRowIndex === i ? null : i)} // Toggle expanded row
+              onClick={() => {
+                setExpandedRowIndex(expandedRowIndex === i ? null : i);
+                setValue(0); // Reset rating every time a new row is clicked
+              }} // Toggle expanded row
             >
               {headers.map((header) => (
                 <td key={header.key}>
@@ -127,9 +131,10 @@ const SortableTable: React.FC<SortableTableProps> = ({ headers, data }) => {
             {expandedRowIndex === i && (
               <tr>
                 <td colSpan={headers.length}>
-                  <div className="submitRating">
+                  <div className={styles.submitRating}>
                     <Rating
                       value={value}
+                      precision={0.5}
                       onChange={(event, newValue) => {
                         setValue(newValue);
                       }}

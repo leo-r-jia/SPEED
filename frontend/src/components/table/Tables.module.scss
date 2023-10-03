@@ -57,22 +57,26 @@
     /* Set the width of the rating column */
   }
 
-  button {
-    border: 1px #979797 solid;
-    border-radius: 0.5rem;
-    background-color: #cad2c5;
-    font-size: 1rem;
-
-    &:hover {
-      background-color: #84a98c;
-      border-color: #cccccc;
-      color: white;
-      transition: all 0.3s;
-      cursor: pointer;
-    }
-  }
-
   .submitRating {
-    background-color: red;
+    display: flex;
+    gap: 1em;
+
+    button {
+      border: 1px #979797 solid;
+      border-radius: 0.5rem;
+      background-color: #cad2c5;
+      font-size: 0.8rem;
+      padding: 0em 0.5em 0.15em;
+
+      &:hover {
+        background-color: #84a98c;
+        border-color: #cccccc;
+        color: white;
+        transition: all 0.3s;
+        cursor: pointer;
+      }
+    }
+
   }
+
 }
