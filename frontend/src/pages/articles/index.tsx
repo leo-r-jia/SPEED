@@ -14,6 +14,7 @@ interface ArticlesInterface {
     SE_practice: string;
     claim: string;
     averageRating: string;
+    approved: boolean;
 }
 
 type ArticlesProps = {
@@ -42,32 +43,31 @@ const Articles: NextPage<ArticlesProps> = ({ articles }) => {
 };
 
 export const getStaticProps: GetStaticProps<ArticlesProps> = async (_) => {
+  try {
+    // Fetch articles from the API endpoint
+    const response = await axios.get("https://speed-backend-git-testing-leo-r-jia.vercel.app/api/articles");
 
-    // Map the data to ensure all articles have consistent property names 
+    // Extract the articles from the API response data
+    const articles: ArticlesInterface[] = response.data;
 
-    try {
-        // Fetch articles from the API endpoint
-        const response = await axios.get(
-          "https://speed-backend-git-testing-leo-r-jia.vercel.app/api/articles"
-        );
-    
-        // Extract the articles from the API response data
-        const articles: ArticlesInterface[] = response.data;
-    
-        return {
-          props: {
-            articles,
-          },
-        };
-      } catch (error) {
-        console.error("Error fetching data from the API:", error);
-        return {
-          props: {
-            articles: [],
-          },
-        };
-    }
+    // Filter the articles to only include approved ones
+    const approvedArticles = articles.filter((article) => article.approved === true);
+
+    return {
+      props: {
+        articles: approvedArticles,
+      },
+    };
+  } catch (error) {
+    console.error("Error fetching data from the API:", error);
+    return {
+      props: {
+        articles: [],
+      },
+    };
+  }
 };
+
 
 
 
