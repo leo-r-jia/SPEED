@@ -1,7 +1,7 @@
 import { GetStaticProps, NextPage } from "next";
 import SortableTable from "../../components/table/SortableTable";
 import axios from "axios";
-import styles from "./Articles.module.scss";
+import styles from "./UserView.module.scss";
 
 
 interface ArticlesInterface {
@@ -18,7 +18,7 @@ interface ArticlesInterface {
 }
 
 type ArticlesProps = {
-    articles: ArticlesInterface[];
+  articles: ArticlesInterface[];
 };
 
 const Articles: NextPage<ArticlesProps> = ({ articles }) => {
