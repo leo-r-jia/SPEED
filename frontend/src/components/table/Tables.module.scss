@@ -12,7 +12,8 @@
 
     /* Define styles for sortable headers when not hovered */
     &:not(.sorted) {
-      cursor: pointer; /* Change cursor style to pointer */
+      cursor: pointer;
+      /* Change cursor style to pointer */
     }
 
     /* Define styles for sortable headers when hovered or sorted */
@@ -27,11 +28,11 @@
         height: 0;
         border-left: 5px solid transparent;
         border-right: 5px solid transparent;
-        border-bottom: 5px solid #333; 
+        border-bottom: 5px solid #333;
         position: absolute;
         top: 50%;
         transform: translateY(50%);
-        right: 5px; 
+        right: 5px;
       }
     }
   }
@@ -52,6 +53,26 @@
 
   th:nth-child(8),
   td:nth-child(8) {
-    width: 10px; /* Set the width of the rating column */
+    width: 10px;
+    /* Set the width of the rating column */
+  }
+
+  button {
+    border: 1px #979797 solid;
+    border-radius: 0.5rem;
+    background-color: #cad2c5;
+    font-size: 1rem;
+
+    &:hover {
+      background-color: #84a98c;
+      border-color: #cccccc;
+      color: white;
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+  }
+
+  .submitRating {
+    background-color: red;
   }
 }

@@ -6,7 +6,7 @@ import ModeratorSortableTable from "../../components/table/ModeratorSortableTabl
 import { useState } from "react";
 import axios from "axios";
 import ColumnDropdown from "./ColumnDropdown";
-import styles from "./Moderator.module.scss";
+import styles from "./ModeratorView.module.scss";
 
 interface ArticlesInterface {
   id: string;
@@ -15,7 +15,7 @@ interface ArticlesInterface {
   source: string;
   publication_year: string;
   doi: string;
-  SE_practice: string; 
+  SE_practice: string;
   claim: string;
   evidence: string;
   approved: boolean;
@@ -32,9 +32,9 @@ const Articles: NextPage<ArticlesProps> = ({ articles }) => {
   const submittedArticles = articles.filter(article => !article.approved && !article.rejected);
 
   const [activeTab, setActiveTab] = useState('submitted');
-  
+
   const [selectedColumns, setSelectedColumns] = useState<string[]>([
-    "id", "title", "authors", "source", "publication_year", 
+    "id", "title", "authors", "source", "publication_year",
     "doi", "SE_practice", "claim", "evidence", "approved", "rejected"
   ]);
 
@@ -44,7 +44,7 @@ const Articles: NextPage<ArticlesProps> = ({ articles }) => {
     { key: "source", label: "Source" },
     { key: "publication_year", label: "Publication Year" },
     { key: "doi", label: "DOI" },
-    { key: "SE_practice", label: "SE Practice" }, 
+    { key: "SE_practice", label: "SE Practice" },
     { key: "claim", label: "Claim" },
     { key: "evidence", label: "Result of Evidence" },
   ];
@@ -52,7 +52,7 @@ const Articles: NextPage<ArticlesProps> = ({ articles }) => {
   return (
     <div className={styles.container}>
       <h1>SPEED Moderator Dashboard</h1>
-      
+
       <ColumnDropdown
         options={headers.map((header) => ({
           key: header.key,
@@ -61,12 +61,12 @@ const Articles: NextPage<ArticlesProps> = ({ articles }) => {
         selectedOptions={selectedColumns}
         onSelect={(selected) => setSelectedColumns(selected)}
       />
-      
+
       <button onClick={() => setActiveTab('submitted')}>Submitted</button>
       <button onClick={() => setActiveTab('approved')}>Approved</button>
       <button onClick={() => setActiveTab('rejected')}>Rejected</button>
       <button onClick={() => setActiveTab('all')}>All</button>
-  
+
       {activeTab === 'submitted' && (
         <ModeratorSortableTable
           headers={headers.filter((header) => selectedColumns.includes(header.key))}
@@ -97,30 +97,30 @@ const Articles: NextPage<ArticlesProps> = ({ articles }) => {
 
 export const getStaticProps: GetStaticProps<ArticlesProps> = async (_) => {
 
-    // Map the data to ensure all articles have consistent property names 
+  // Map the data to ensure all articles have consistent property names 
 
-    try {
-        // Fetch articles from the API endpoint
-        const response = await axios.get(
-          "https://speed-backend-git-testing-leo-r-jia.vercel.app/api/articles"
-        );
-    
-        // Extract the articles from the API response data
-        const articles: ArticlesInterface[] = response.data;
-    
-        return {
-          props: {
-            articles,
-          },
-        };
-      } catch (error) {
-        console.error("Error fetching data from the API:", error);
-        return {
-          props: {
-            articles: [],
-          },
-        };
-    }
+  try {
+    // Fetch articles from the API endpoint
+    const response = await axios.get(
+      "https://speed-backend-git-testing-leo-r-jia.vercel.app/api/articles"
+    );
+
+    // Extract the articles from the API response data
+    const articles: ArticlesInterface[] = response.data;
+
+    return {
+      props: {
+        articles,
+      },
+    };
+  } catch (error) {
+    console.error("Error fetching data from the API:", error);
+    return {
+      props: {
+        articles: [],
+      },
+    };
+  }
 };
 
 export default Articles;
