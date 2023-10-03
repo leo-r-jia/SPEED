@@ -3,7 +3,6 @@ import SortableTable from "../../components/table/SortableTable";
 import axios from "axios";
 import styles from "./Articles.module.scss";
 
-
 interface ArticlesInterface {
     id: string;
     title: string;
