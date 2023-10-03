@@ -3,7 +3,6 @@ import SortableTable from "../../components/table/SortableTable";
 import axios from "axios";
 import styles from "./Articles.module.scss";
 
-
 interface ArticlesInterface {
     id: string;
     title: string;
@@ -15,7 +14,6 @@ interface ArticlesInterface {
     claim: string;
     averageRating: string;
     approved: boolean;
-}
 
 type ArticlesProps = {
     articles: ArticlesInterface[];
@@ -35,6 +33,7 @@ const Articles: NextPage<ArticlesProps> = ({ articles }) => {
 
     return (
         <div className={styles.container}>
+
             <h1>SPEED Articles</h1>
             <p>Search Placeholder</p>
             <SortableTable headers={headers} data={articles} />
