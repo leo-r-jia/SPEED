@@ -46,6 +46,4 @@ describe('approveArticle Serverless Function', () => {
 
         expect(mockRes.status).toHaveBeenCalledWith(405);
     });
-
-    // ... add more tests for different scenarios ...
 });
