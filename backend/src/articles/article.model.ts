@@ -8,7 +8,6 @@ export interface Article extends Document {
   doi: string;
   summary: string;
   linked_discussion: string;
-  published_date: Date;
   submission_date : Date;
   ratings: number[];  // Array of individual ratings
   averageRating: number; // Average of all ratings
@@ -28,7 +27,6 @@ export const ArticleSchema = new Schema({
   doi: { type: String },
   summary: { type: String },
   linked_discussion: { type: String },
-  published_date: { type: Date, required: true },
   submission_date: { type: Date, default: Date.now },
   ratings: [Number], 
   averageRating: { type: Number, default: 0 },
