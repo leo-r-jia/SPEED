@@ -21,6 +21,7 @@ interface ArticlesInterface {
   evidence: string;
   approved: boolean;
   rejected: boolean;
+  submission_date: string;
 }
 
 type ArticlesProps = {
@@ -52,7 +53,7 @@ const filteredAllArticles = filterBySearchValue(articles);
 
   const [selectedColumns, setSelectedColumns] = useState<string[]>([
     "id", "title", "authors", "source", "publication_year",
-    "doi", "SE_practice", "claim", "evidence", "approved", "rejected"
+    "doi", "SE_practice", "claim", "evidence", "approved", "rejected", "submission_date"
   ]);
 
   const headers: { key: keyof ArticlesInterface; label: string }[] = [
@@ -64,6 +65,7 @@ const filteredAllArticles = filterBySearchValue(articles);
     { key: "SE_practice", label: "SE Practice" },
     { key: "claim", label: "Claim" },
     { key: "evidence", label: "Result of Evidence" },
+    { key: "submission_date", label: "Submission Date" }
   ];
 
   return (

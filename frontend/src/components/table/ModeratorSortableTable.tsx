@@ -11,6 +11,19 @@ const formatAuthors = (authors: string[]) => {
   return authors.join(", "); // Join authors with a comma and space
 };
 
+const formatDateString = (dateString: string) => {
+  const date = new Date(dateString);
+  const options: Intl.DateTimeFormatOptions = {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  };
+  return date.toLocaleDateString(undefined, options);
+};
+
 const ModeratorSortableTable: React.FC<SortableTableProps> = ({
   headers,
   data,
@@ -78,7 +91,7 @@ const handleReject = async (index: number) => {
   // Get the sorting indicator (arrow) based on the sorting direction
   const getSortingIndicator = (columnKey: string) => {
     if (columnKey === sortConfig.key) {
-      return sortConfig.direction === "ascending" ? "▲" : "▼"; // Up arrow or down arrow
+      return sortConfig.direction === "ascending" ? "▼" : "▲"; // Up arrow or down arrow
     }
     return ""; // No arrow for other columns
   };
@@ -140,7 +153,10 @@ const handleReject = async (index: number) => {
               onClick={() => setExpandedRowIndex(expandedRowIndex === i ? null : i)} // Toggle expanded row
             >
               {headers.map((header) => (
-                <td key={header.key}>{row[header.key]}</td>
+                <td key={header.key}>
+                  {header.key === "submission_date"
+                  ? formatDateString(row[header.key])
+                  : row[header.key]}</td>
               ))}
             </tr>
             {/* Expanded Section */}
