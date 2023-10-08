@@ -1,23 +1,28 @@
 import React, { useState } from "react";
 import styles from "./Tables.module.scss";
-import Rating from '@mui/material/Rating';
+import Rating from "@mui/material/Rating";
 import axios from "axios";
 
 interface SortableTableProps {
   headers: { key: string; label: string }[];
   data: any[];
+  selectedColumns: string[];
 }
 
 const convertRatingToStars = (rating: number) => {
   // Returns Rating component
-  return (<Rating name="read-only" value={rating} precision={0.5} size="small" readOnly />);
+  return <Rating name="read-only" value={rating} precision={0.5} size="small" readOnly />;
 };
 
 const formatAuthors = (authors: string[]) => {
   return authors.join(", "); // Join authors with a comma and space
 };
 
-const SortableTable: React.FC<SortableTableProps> = ({ headers, data }) => {
+const SortableTable: React.FC<SortableTableProps> = ({
+  headers,
+  data,
+  selectedColumns,
+}) => {
   const [sortConfig, setSortConfig] = useState({
     key: "",
     direction: "ascending",
@@ -33,17 +38,17 @@ const SortableTable: React.FC<SortableTableProps> = ({ headers, data }) => {
       // Send a POST request to the server to rate the article
       const response = await axios.post(
         `https://speed-backend-git-testing-leo-r-jia.vercel.app/api/articles/rate?_id=${article._id}`,
-        { "rating": rating }
+        { rating }
       );
       // Log the response for debugging
-      console.log('Rating Response:', response);
+      console.log("Rating Response:", response);
 
       // Close the rating submission
       setExpandedRowIndex(null);
       setValue(0);
     } catch (error) {
       // Log the error for debugging
-      console.error('Rating Error:', error);
+      console.error("Rating Error:", error);
     }
   };
 
@@ -90,18 +95,20 @@ const SortableTable: React.FC<SortableTableProps> = ({ headers, data }) => {
     <table className={styles.myTable}>
       <thead>
         <tr>
-          {headers.map((header) => (
-            <th
-              key={header.key}
-              onClick={() => handleSort(header.key)}
-              className={header.key === sortConfig.key ? styles.active : ""}
-            >
-              {header.label}{" "}
-              <span className={styles.sortIndicator}>
-                {getSortingIndicator(header.key)}
-              </span>
-            </th>
-          ))}
+          {headers
+            .filter((header) => selectedColumns.includes(header.key))
+            .map((header) => (
+              <th
+                key={header.key}
+                onClick={() => handleSort(header.key)}
+                className={header.key === sortConfig.key ? styles.active : ""}
+              >
+                {header.label}{" "}
+                <span className={styles.sortIndicator}>
+                  {getSortingIndicator(header.key)}
+                </span>
+              </th>
+            ))}
         </tr>
       </thead>
       <tbody>
@@ -114,20 +121,22 @@ const SortableTable: React.FC<SortableTableProps> = ({ headers, data }) => {
                 setValue(0); // Reset rating every time a new row is clicked
               }} // Toggle expanded row
             >
-              {headers.map((header) => (
-                <td key={header.key}>
-                  {header.key === "authors"
-                    ? formatAuthors(row[header.key])
-                    : header.key === "averageRating"
+              {headers
+                .filter((header) => selectedColumns.includes(header.key))
+                .map((header) => (
+                  <td key={header.key}>
+                    {header.key === "authors"
+                      ? formatAuthors(row[header.key])
+                      : header.key === "averageRating"
                       ? convertRatingToStars(row[header.key])
                       : row[header.key]}
-                </td>
-              ))}
+                  </td>
+                ))}
             </tr>
             {/* Expanded row with Rating */}
             {expandedRowIndex === i && (
               <tr>
-                <td colSpan={headers.length}>
+                <td colSpan={selectedColumns.length}>
                   <div className={styles.submitRating}>
                     <Rating
                       value={value}
