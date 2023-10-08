@@ -19,9 +19,9 @@ interface ArticlesInterface {
   SE_practice: string;
   claim: string;
   evidence: string;
-  submission_date: string;
   approved: boolean;
   rejected: boolean;
+  submission_date: string;
 }
 
 type ArticlesProps = {
