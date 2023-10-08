@@ -54,6 +54,9 @@ const SortableTable: React.FC<SortableTableProps> = ({
 
   // Function to handle header click and update sorting state
   const handleSort = (column: string) => {
+    // Close the expanded section and reset rating when sorting is triggered
+    setExpandedRowIndex(null);
+    setValue(0);
     // If clicking on the same column, toggle sorting direction
     if (sortConfig.key === column) {
       const newDirection =
