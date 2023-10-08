@@ -7,6 +7,7 @@ import { useState } from "react";
 import axios from "axios";
 import ColumnDropdown from "./ColumnDropdown";
 import styles from "./ModeratorView.module.scss";
+import SearchBar from "@/components/search/SearchBar";
 
 interface ArticlesInterface {
   id: string;
@@ -27,11 +28,27 @@ type ArticlesProps = {
 };
 
 const Articles: NextPage<ArticlesProps> = ({ articles }) => {
+  const [searchValue, setSearchValue] = useState("");
+  const [searchBy, setSearchBy] = useState<"title" | "authors" | "source">("title");
+
   const approvedArticles = articles.filter(article => article.approved === true);
   const rejectedArticles = articles.filter(article => article.rejected === true);
   const submittedArticles = articles.filter(article => !article.approved && !article.rejected);
 
   const [activeTab, setActiveTab] = useState('submitted');
+
+
+  const filterBySearchValue = (articleList: ArticlesInterface[]) => {
+    return articleList.filter(article => {
+      return String(article[searchBy]).toLowerCase().includes(searchValue.toLowerCase());
+    });
+  };
+  
+
+const filteredApprovedArticles = filterBySearchValue(approvedArticles);
+const filteredRejectedArticles = filterBySearchValue(rejectedArticles);
+const filteredSubmittedArticles = filterBySearchValue(submittedArticles);
+const filteredAllArticles = filterBySearchValue(articles);
 
   const [selectedColumns, setSelectedColumns] = useState<string[]>([
     "id", "title", "authors", "source", "publication_year",
@@ -52,7 +69,12 @@ const Articles: NextPage<ArticlesProps> = ({ articles }) => {
   return (
     <div className={styles.container}>
       <h1>SPEED Moderator Dashboard</h1>
-
+      <SearchBar
+        value={searchValue}
+        onChange={setSearchValue}
+        searchBy={searchBy}
+        onSearchByChange={setSearchBy}
+      />
       <ColumnDropdown
         options={headers.map((header) => ({
           key: header.key,
@@ -70,25 +92,25 @@ const Articles: NextPage<ArticlesProps> = ({ articles }) => {
       {activeTab === 'submitted' && (
         <ModeratorSortableTable
           headers={headers.filter((header) => selectedColumns.includes(header.key))}
-          data={submittedArticles}
+          data={filteredSubmittedArticles}
         />
       )}
       {activeTab === 'approved' && (
         <ModeratorSortableTable
           headers={headers.filter((header) => selectedColumns.includes(header.key))}
-          data={approvedArticles}
+          data={filteredApprovedArticles}
         />
       )}
       {activeTab === 'rejected' && (
         <ModeratorSortableTable
           headers={headers.filter((header) => selectedColumns.includes(header.key))}
-          data={rejectedArticles}
+          data={filteredRejectedArticles}
         />
       )}
       {activeTab === 'all' && (
         <ModeratorSortableTable
           headers={headers.filter((header) => selectedColumns.includes(header.key))}
-          data={articles}
+          data={filteredAllArticles}
         />
       )}
     </div>
