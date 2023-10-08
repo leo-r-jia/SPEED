@@ -2,19 +2,21 @@ import { GetStaticProps, NextPage } from "next";
 import SortableTable from "../../components/table/SortableTable";
 import axios from "axios";
 import styles from "./UserView.module.scss";
+import { useState } from "react";
+import SearchBar from "../../components/search/SearchBar";
 
 
 interface ArticlesInterface {
-    id: string;
-    title: string;
-    authors: string;
-    source: string;
-    publication_year: string;
-    doi: string;
-    SE_practice: string;
-    claim: string;
-    averageRating: string;
-    approved: boolean;
+  id: string;
+  title: string;
+  authors: string;
+  source: string;
+  publication_year: string;
+  doi: string;
+  SE_practice: string;
+  claim: string;
+  averageRating: string;
+  approved: boolean;
 }
 
 type ArticlesProps = {
@@ -22,24 +24,39 @@ type ArticlesProps = {
 };
 
 const Articles: NextPage<ArticlesProps> = ({ articles }) => {
-    const headers: { key: keyof ArticlesInterface; label: string }[] = [
-        { key: "title", label: "Title" },
-        { key: "authors", label: "Authors" },
-        { key: "source", label: "Source" },
-        { key: "publication_year", label: "Publication Year" },
-        { key: "doi", label: "DOI" },
-        { key: "SE_practice", label: "SE Practice" },
-        { key: "claim", label: "Claim" },
-        { key: "averageRating", label: "Rating" },
-    ];
 
-    return (
-        <div className={styles.container}>
-            <h1>SPEED Articles</h1>
-            <p>Search Placeholder</p>
-            <SortableTable headers={headers} data={articles} />
-        </div>
-    );
+  const [searchValue, setSearchValue] = useState("");
+  const [searchBy, setSearchBy] = useState<"title" | "authors" | "source">("title");
+
+  const filteredArticles = articles.filter(article => {
+    return String(article[searchBy]).toLowerCase().includes(searchValue.toLowerCase());
+});
+
+
+  const headers: { key: keyof ArticlesInterface; label: string }[] = [
+    { key: "title", label: "Title" },
+    { key: "authors", label: "Authors" },
+    { key: "source", label: "Source" },
+    { key: "publication_year", label: "Publication Year" },
+    { key: "doi", label: "DOI" },
+    { key: "SE_practice", label: "SE Practice" },
+    { key: "claim", label: "Claim" },
+    { key: "averageRating", label: "Rating" },
+  ];
+
+  return (
+    <div className={styles.container}>
+      <h1>SPEED Articles</h1>
+      <SearchBar
+        value={searchValue}
+        onChange={setSearchValue}
+        searchBy={searchBy}
+        onSearchByChange={setSearchBy}
+      />
+
+      <SortableTable headers={headers} data={filteredArticles} />
+    </div>
+  );
 };
 
 export const getStaticProps: GetStaticProps<ArticlesProps> = async (_) => {

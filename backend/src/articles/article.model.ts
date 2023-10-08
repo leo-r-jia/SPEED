@@ -8,7 +8,7 @@ export interface Article extends Document {
   doi: string;
   summary: string;
   linked_discussion: string;
-  updated_date: Date;
+  submission_date : Date;
   ratings: number[];  // Array of individual ratings
   averageRating: number; // Average of all ratings
   totalRatings: number;  // Total number of ratings given
@@ -27,12 +27,12 @@ export const ArticleSchema = new Schema({
   doi: { type: String },
   summary: { type: String },
   linked_discussion: { type: String },
-  updated_date: { type: Date, default: Date.now },
+  submission_date: { type: Date, default: Date.now },
   ratings: [Number], 
   averageRating: { type: Number, default: 0 },
   totalRatings: { type: Number, default: 0 },
-  approved: { type: Boolean, default: false }, // default to false if not provided
-  rejected: { type: Boolean, default: false }, // default to false if not provided
+  approved: { type: Boolean, default: false }, 
+  rejected: { type: Boolean, default: false }, 
   SE_practice: { type: String },
   claim: { type: String },
   evidence: { type: String }
