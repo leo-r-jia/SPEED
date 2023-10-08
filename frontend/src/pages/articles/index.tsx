@@ -5,7 +5,6 @@ import styles from "./UserView.module.scss";
 import { useState } from "react";
 import SearchBar from "../../components/search/SearchBar";
 
-
 interface ArticlesInterface {
   id: string;
   title: string;
@@ -24,14 +23,19 @@ type ArticlesProps = {
 };
 
 const Articles: NextPage<ArticlesProps> = ({ articles }) => {
-
   const [searchValue, setSearchValue] = useState("");
   const [searchBy, setSearchBy] = useState<"title" | "authors" | "source">("title");
 
-  const filteredArticles = articles.filter(article => {
-    return String(article[searchBy]).toLowerCase().includes(searchValue.toLowerCase());
-});
-
+  const [selectedColumns, setSelectedColumns] = useState<string[]>([
+    "title",
+    "authors",
+    "source",
+    "publication_year",
+    "doi",
+    "SE_practice",
+    "claim",
+    "averageRating",
+  ]);
 
   const headers: { key: keyof ArticlesInterface; label: string }[] = [
     { key: "title", label: "Title" },
@@ -44,6 +48,12 @@ const Articles: NextPage<ArticlesProps> = ({ articles }) => {
     { key: "averageRating", label: "Rating" },
   ];
 
+  const filteredArticles = articles.filter((article) => {
+    return String(article[searchBy])
+      .toLowerCase()
+      .includes(searchValue.toLowerCase());
+  });
+
   return (
     <div className={styles.container}>
       <h1>SPEED Articles</h1>
@@ -54,7 +64,32 @@ const Articles: NextPage<ArticlesProps> = ({ articles }) => {
         onSearchByChange={setSearchBy}
       />
 
-      <SortableTable headers={headers} data={filteredArticles} />
+      <div className={styles.columnFilter}>
+        {headers.map((header) => (
+          <label key={header.key}>
+            <input
+              type="checkbox"
+              checked={selectedColumns.includes(header.key)}
+              onChange={() => {
+                if (selectedColumns.includes(header.key)) {
+                  setSelectedColumns(
+                    selectedColumns.filter((col) => col !== header.key)
+                  );
+                } else {
+                  setSelectedColumns([...selectedColumns, header.key]);
+                }
+              }}
+            />
+            {header.label}
+          </label>
+        ))}
+      </div>
+
+      <SortableTable
+        headers={headers}
+        data={filteredArticles}
+        selectedColumns={selectedColumns}
+      />
     </div>
   );
 };
@@ -62,13 +97,17 @@ const Articles: NextPage<ArticlesProps> = ({ articles }) => {
 export const getStaticProps: GetStaticProps<ArticlesProps> = async (_) => {
   try {
     // Fetch articles from the API endpoint
-    const response = await axios.get("https://speed-backend-git-testing-leo-r-jia.vercel.app/api/articles");
+    const response = await axios.get(
+      "https://speed-backend-git-testing-leo-r-jia.vercel.app/api/articles"
+    );
 
     // Extract the articles from the API response data
     const articles: ArticlesInterface[] = response.data;
 
     // Filter the articles to only include approved ones
-    const approvedArticles = articles.filter((article) => article.approved === true);
+    const approvedArticles = articles.filter(
+      (article) => article.approved === true
+    );
 
     return {
       props: {
@@ -85,7 +124,4 @@ export const getStaticProps: GetStaticProps<ArticlesProps> = async (_) => {
   }
 };
 
-
-
-
-export default Articles; 
+export default Articles;
