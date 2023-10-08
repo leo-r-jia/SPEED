@@ -78,7 +78,7 @@ const handleReject = async (index: number) => {
   // Get the sorting indicator (arrow) based on the sorting direction
   const getSortingIndicator = (columnKey: string) => {
     if (columnKey === sortConfig.key) {
-      return sortConfig.direction === "ascending" ? "▲" : "▼"; // Up arrow or down arrow
+      return sortConfig.direction === "ascending" ? "▼" : "▲"; // Up arrow or down arrow
     }
     return ""; // No arrow for other columns
   };
