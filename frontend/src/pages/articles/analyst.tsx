@@ -43,7 +43,7 @@ const Articles: NextPage<ArticlesProps> = ({ articles }) => {
         article.rejected === false
     );
 
-  const [activeTab, setActiveTab] = useState('submitted');
+  const [activeTab, setActiveTab] = useState('analystQueue');
 
 
   const filterBySearchValue = (articleList: ArticlesInterface[]) => {
