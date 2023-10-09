@@ -7,9 +7,13 @@ interface SortableTableProps {
   data: any[];
 }
 
-const formatAuthors = (authors: string[]) => {
-    return authors.join(", "); // Join authors with a comma and space
+const formatAuthors = (authors: string[] | undefined) => {
+    if (authors && authors.length > 0) {
+      return authors.join(", "); // Join authors with a comma and space
+    }
+    return ""; // Return an empty string if authors is undefined or empty
   };
+  
 
 const formatDateString = (dateString: string) => {
   const date = new Date(dateString);
@@ -89,9 +93,11 @@ const handleReject = async (index: number) => {
       );
       // Log the response for debugging
       console.log('Update Summary Response:', response);
-      // Update the article in the state with the data returned by the server
-      data[index] = response.data;
+      alert("Summary Updated Successfully");
       setExpandedRowIndex(null);
+      
+    // Clear the editedSummary when the row is closed or changed
+      setEditedSummary("");
     } catch (error) {
       // Log the error for debugging
       console.error('Update Summary Error:', error);
