@@ -26,7 +26,7 @@ export const ArticleSchema = new Schema({
   source: { type: String, required: true },
   publication_year: { type: Number, required: true },
   doi: { type: String },
-  summary: { type: String },
+  summary: { type: String, default: null },
   linked_discussion: { type: String },
   submission_date: { type: Date, default: Date.now },
   ratings: [Number], 
