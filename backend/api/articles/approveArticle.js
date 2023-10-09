@@ -1,3 +1,6 @@
+import { connectToDatabase } from "../../config/db";
+import { ArticleModel } from '../../src/articles/article.model';
+
 export default async (req, res) => {
 
     res.setHeader('Access-Control-Allow-Origin', '*');
