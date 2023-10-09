@@ -10,6 +10,7 @@ const NewArticle = () => {
     const [doi, setDoi] = useState("");
     const [SE_practice, setSePractice] = useState("");
     const [claim, setClaim] = useState("");
+    const [evidence, setEvidence] = useState("");
 
     // Refs for user handling messages
     const submitWarningRef = useRef<HTMLParagraphElement | null>(null);
@@ -47,7 +48,8 @@ const NewArticle = () => {
             analystApproved: false,
             rejected: false,
             SE_practice,
-            claim
+            claim,
+            evidence
         };
 
         try {
@@ -75,6 +77,7 @@ const NewArticle = () => {
             setDoi("");
             setSePractice("");
             setClaim("");
+            setEvidence("");
             // Provide feedback to user
             toggleDisplay(submitWarningRef, 'none');
             toggleDisplay(submitUnsuccessfulRef, 'none');
@@ -87,7 +90,6 @@ const NewArticle = () => {
             toggleDisplay(submitSuccessfulRef, 'none');
         }
     };
-
 
 
     // Some helper methods for the authors array 
@@ -216,6 +218,19 @@ const NewArticle = () => {
                         setClaim(event.target.value);
                     }}
                 />
+
+                <label htmlFor="evidence">Result of Evidence:</label>
+                <input
+                    className={formStyles.formItem}
+                    type="text"
+                    name="evidence"
+                    id="evidence"
+                    value={evidence}
+                    onChange={(event) => {
+                        setEvidence(event.target.value);
+                    }}
+                />
+
 
                 <p className={formStyles.warning} ref={submitWarningRef}>Please fill in all fields</p>
                 <p className={formStyles.warning} ref={submitUnsuccessfulRef}>Article did not submit. Please try again.</p>
