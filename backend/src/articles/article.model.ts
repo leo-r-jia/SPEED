@@ -33,7 +33,7 @@ export const ArticleSchema = new Schema({
   averageRating: { type: Number, default: 0 },
   totalRatings: { type: Number, default: 0 },
   moderatorApproved: { type: Boolean, default: false }, 
-  analystRejected: { type: Boolean, default: false},
+  analystApproved: { type: Boolean, default: false},
   rejected: { type: Boolean, default: false }, 
   SE_practice: { type: String },
   claim: { type: String },
