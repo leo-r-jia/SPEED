@@ -8,8 +8,8 @@ interface SortableTableProps {
 }
 
 const formatAuthors = (authors: string[]) => {
-  return authors.join(", "); // Join authors with a comma and space
-};
+    return authors.join(", "); // Join authors with a comma and space
+  };
 
 const formatDateString = (dateString: string) => {
   const date = new Date(dateString);
@@ -34,6 +34,9 @@ const AnalystSortableTable: React.FC<SortableTableProps> = ({
   });
 
   const [expandedRowIndex, setExpandedRowIndex] = useState<number | null>(null);
+
+  const [editedSummary, setEditedSummary] = useState("");
+
 
 // Inside handleApprove function
 const handleApprove = async (index: number) => {
@@ -75,8 +78,29 @@ const handleReject = async (index: number) => {
   }
 }; 
 
+  // Function to handle editing the summary
+  const handleEditSummary = async (index: number) => {
+    const article = data[index];
+    try {
+      // Send a POST request to the server to update the summary
+      const response = await axios.post(
+        `https://speed-backend-git-testing-leo-r-jia.vercel.app/api/articles/submitSummary?_id=${article._id}`,
+        { "summary": editedSummary } // Send the edited summary
+      );
+      // Log the response for debugging
+      console.log('Update Summary Response:', response);
+      // Update the article in the state with the data returned by the server
+      data[index] = response.data;
+      setExpandedRowIndex(null);
+    } catch (error) {
+      // Log the error for debugging
+      console.error('Update Summary Error:', error);
+    }
+  };
+
   // Function to handle header click and update sorting state
   const handleSort = (column: string) => {
+    setExpandedRowIndex(null);
     // If clicking on the same column, toggle sorting direction
     if (sortConfig.key === column) {
       const newDirection =
@@ -163,6 +187,11 @@ const handleReject = async (index: number) => {
             {expandedRowIndex === i && (
               <tr>
                 <td colSpan={headers.length}>
+                  <textarea
+                    value={editedSummary}
+                    onChange={(e) => setEditedSummary(e.target.value)}
+                  />
+                  <button onClick={() => handleEditSummary(i)}>Save Summary</button>
                   <button onClick={() => handleApprove(i)}>Approve</button>
                   <button onClick={() => handleReject(i)}>Reject</button>
                 </td>
@@ -174,5 +203,5 @@ const handleReject = async (index: number) => {
     </table>
   );
 };
-  
+
 export default AnalystSortableTable;
