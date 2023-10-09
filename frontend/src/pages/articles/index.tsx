@@ -16,6 +16,8 @@ interface ArticlesInterface {
   claim: string;
   averageRating: string;
   approved: boolean;
+  analystApproved: boolean; 
+  moderatorApproved: boolean;
 }
 
 type ArticlesProps = {
@@ -106,7 +108,7 @@ export const getStaticProps: GetStaticProps<ArticlesProps> = async (_) => {
 
     // Filter the articles to only include approved ones
     const approvedArticles = articles.filter(
-      (article) => article.approved === true
+      (article) => article.analystApproved === true && article.moderatorApproved === true
     );
 
     return {
@@ -123,5 +125,6 @@ export const getStaticProps: GetStaticProps<ArticlesProps> = async (_) => {
     };
   }
 };
+
 
 export default Articles;
