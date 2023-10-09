@@ -12,7 +12,8 @@ export interface Article extends Document {
   ratings: number[];  // Array of individual ratings
   averageRating: number; // Average of all ratings
   totalRatings: number;  // Total number of ratings given
-  approved: boolean;
+  moderatorApproved: boolean;
+  analystApproved: boolean;
   rejected: boolean;
   SE_practice: string;
   claim: string;
@@ -31,7 +32,8 @@ export const ArticleSchema = new Schema({
   ratings: [Number], 
   averageRating: { type: Number, default: 0 },
   totalRatings: { type: Number, default: 0 },
-  approved: { type: Boolean, default: false }, 
+  analystApproved: { type: Boolean, default: false }, 
+  analystRejected: { type: Boolean, default: false},
   rejected: { type: Boolean, default: false }, 
   SE_practice: { type: String },
   claim: { type: String },
