@@ -22,6 +22,8 @@ interface ArticlesInterface {
   approved: boolean;
   rejected: boolean;
   submission_date: string;
+  moderatorApproved: boolean; 
+  analystApproved: boolean; 
 }
 
 type ArticlesProps = {
@@ -32,10 +34,23 @@ const Articles: NextPage<ArticlesProps> = ({ articles }) => {
   const [searchValue, setSearchValue] = useState("");
   const [searchBy, setSearchBy] = useState<"title" | "authors" | "source">("title");
 
-  const approvedArticles = articles.filter(article => article.approved === true);
-  const rejectedArticles = articles.filter(article => article.rejected === true);
-  const submittedArticles = articles.filter(article => !article.approved && !article.rejected);
+  const approvedArticles = articles.filter(
+    (article) => article.analystApproved === true && article.moderatorApproved === true
+  );
+    const rejectedArticles = articles.filter(article => article.rejected === true);
+    const submittedArticles = articles.filter(
+      (article) =>
+        article.analystApproved === false &&
+        article.moderatorApproved === false &&
+        article.rejected === false
+    );
 
+    const analystQueueArticles = articles.filter(
+      (article) =>
+        article.analystApproved === false &&
+        article.moderatorApproved === true &&
+        article.rejected === false
+    );
   const [activeTab, setActiveTab] = useState('submitted');
 
 
@@ -49,6 +64,7 @@ const Articles: NextPage<ArticlesProps> = ({ articles }) => {
 const filteredApprovedArticles = filterBySearchValue(approvedArticles);
 const filteredRejectedArticles = filterBySearchValue(rejectedArticles);
 const filteredSubmittedArticles = filterBySearchValue(submittedArticles);
+const filteredanalystQueueArticles = filterBySearchValue(analystQueueArticles);
 const filteredAllArticles = filterBySearchValue(articles);
 
   const [selectedColumns, setSelectedColumns] = useState<string[]>([
@@ -87,6 +103,7 @@ const filteredAllArticles = filterBySearchValue(articles);
       />
 
       <button onClick={() => setActiveTab('submitted')}>Submitted</button>
+      <button onClick={() => setActiveTab('analystQueue')}>Analyst Queue</button>
       <button onClick={() => setActiveTab('approved')}>Approved</button>
       <button onClick={() => setActiveTab('rejected')}>Rejected</button>
       <button onClick={() => setActiveTab('all')}>All</button>
@@ -96,6 +113,12 @@ const filteredAllArticles = filterBySearchValue(articles);
           headers={headers.filter((header) => selectedColumns.includes(header.key))}
           data={filteredSubmittedArticles}
         />
+      )}
+      {activeTab === 'analystQueue' && (
+      <ModeratorSortableTable
+        headers={headers.filter((header) => selectedColumns.includes(header.key))}
+        data={filteredanalystQueueArticles}
+      />
       )}
       {activeTab === 'approved' && (
         <ModeratorSortableTable

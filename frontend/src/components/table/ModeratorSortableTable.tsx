@@ -39,21 +39,22 @@ const ModeratorSortableTable: React.FC<SortableTableProps> = ({
 const handleApprove = async (index: number) => {
   const article = data[index];
   try {
-    // Send a POST request to the server to approve the article
+    // Send a POST request to the server to approve the article as a moderator
     const response = await axios.post(
       `https://speed-backend-git-testing-leo-r-jia.vercel.app/api/articles/approveArticle?_id=${article._id}`, // Use '_id' field in the URL
-      { "approved": true }
+      { "approved": true, "role": "moderator" } // Include the role in the request body
     );
     // Log the response for debugging
     console.log('Approve Response:', response);
     // Update the article in the state with the data returned by the server
-    data[index] = response.data;
+    alert("Summary Approved Successfully by Moderator! Now passed on for Analysis.");
     setExpandedRowIndex(null);
   } catch (error) {
     // Log the error for debugging
     console.error('Approve Error:', error);
   }
 };
+
 
 // Inside handleReject function
 const handleReject = async (index: number) => {
@@ -67,7 +68,7 @@ const handleReject = async (index: number) => {
     // Log the response for debugging
     console.log('Reject Response:', response);
     // Update the article in the state with the data returned by the server
-    data[index] = response.data;
+    alert("Article Rejected Successfully.");
     setExpandedRowIndex(null);
   } catch (error) {
     // Log the error for debugging
