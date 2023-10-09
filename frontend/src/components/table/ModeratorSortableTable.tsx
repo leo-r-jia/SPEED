@@ -154,13 +154,16 @@ const handleReject = async (index: number) => {
               key={i} 
               onClick={() => setExpandedRowIndex(expandedRowIndex === i ? null : i)} // Toggle expanded row
             >
-              {headers.map((header) => (
-                <td key={header.key}>
-                  {header.key === "submission_date"
-                  ? formatDateString(row[header.key])
-                  : row[header.key]}</td>
-              ))}
-            </tr>
+      {headers.map((header) => (
+        <td key={header.key}>
+          {header.key === "submission_date"
+            ? formatDateString(row[header.key])
+            : header.key === "authors"
+            ? formatAuthors(row[header.key]) // Format authors using formatAuthors function
+            : row[header.key]}
+        </td>
+      ))}
+    </tr>
             {/* Expanded Section */}
             {expandedRowIndex === i && (
               <tr>
