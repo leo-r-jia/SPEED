@@ -1,7 +1,7 @@
 import { GetStaticProps, NextPage } from "next";
 import data from "../../utils/dummydata.json";
 import AnalystSortableTable from "../../components/table/AnalystSortableTable";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import ColumnDropdown from "./ColumnDropdown";
 import styles from "./ModeratorView.module.scss";
@@ -28,9 +28,10 @@ type ArticlesProps = {
   articles: ArticlesInterface[];
 };
 
-const Articles: NextPage<ArticlesProps> = ({ articles }) => {
+const Articles: NextPage<ArticlesProps> = ({ articles: initialArticles }) => {
   const [searchValue, setSearchValue] = useState("");
   const [searchBy, setSearchBy] = useState<"title" | "authors" | "source">("title");
+  const [articles, setArticles] = useState(initialArticles); // Store articles in state
 
   const approvedArticles = articles.filter(
     (article) => article.analystApproved === true && article.moderatorApproved === true
@@ -73,6 +74,27 @@ const filteredAllArticles = filterBySearchValue(articles);
     { key: "evidence", label: "Result of Evidence" },
     { key: "submission_date", label: "Submission Date" }
   ];
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Fetch all articles from the API endpoint without filtering
+        const response = await axios.get(
+          "https://speed-backend-git-testing-leo-r-jia.vercel.app/api/articles"
+        );
+  
+        // Extract the articles from the API response data
+        const articles: ArticlesInterface[] = response.data;
+  
+        // Update the state with all articles
+        setArticles(articles);
+      } catch (error) {
+        console.error("Error fetching data from the API:", error);
+      }
+    };
+  
+    fetchData(); // Call the fetchData function when the component mounts
+  }, []); // The empty dependency array ensures this useEffect runs once on mount
 
   return (
     <div className={styles.container}>
