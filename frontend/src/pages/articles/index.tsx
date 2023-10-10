@@ -2,7 +2,7 @@ import { GetStaticProps, NextPage } from "next";
 import SortableTable from "../../components/table/SortableTable";
 import axios from "axios";
 import styles from "./UserView.module.scss";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import SearchBar from "../../components/search/SearchBar";
 
 interface ArticlesInterface {
@@ -24,9 +24,12 @@ type ArticlesProps = {
   articles: ArticlesInterface[];
 };
 
-const Articles: NextPage<ArticlesProps> = ({ articles }) => {
+const Articles: NextPage<ArticlesProps> = ({ articles: initialArticles }) => {
   const [searchValue, setSearchValue] = useState("");
   const [searchBy, setSearchBy] = useState<"title" | "authors" | "source">("title");
+
+  const [articles, setArticles] = useState(initialArticles); // Store articles in state
+
 
   const [selectedColumns, setSelectedColumns] = useState<string[]>([
     "title",
@@ -55,6 +58,33 @@ const Articles: NextPage<ArticlesProps> = ({ articles }) => {
       .toLowerCase()
       .includes(searchValue.toLowerCase());
   });
+
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Fetch articles from the API endpoint
+        const response = await axios.get(
+          "https://speed-backend-git-testing-leo-r-jia.vercel.app/api/articles"
+        );
+
+        // Extract the articles from the API response data
+        const articles: ArticlesInterface[] = response.data;
+
+        // Filter the articles to only include approved ones
+        const approvedArticles = articles.filter(
+          (article) => article.analystApproved === true && article.moderatorApproved === true
+        );
+
+        setArticles(approvedArticles);
+      } catch (error) {
+        console.error("Error fetching data from the API:", error);
+      }
+    };
+
+    fetchData(); // Call the fetchData function when the component mounts
+  }, []); // The empty dependency array ensures this useEffect runs once on mount
+
 
   return (
     <div className={styles.container}>
