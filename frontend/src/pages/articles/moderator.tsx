@@ -92,6 +92,7 @@ const filteredAllArticles = filterBySearchValue(articles);
         // Fetch all articles from the API endpoint without filtering
         const response = await axios.get(
           "https://speed-backend-git-testing-leo-r-jia.vercel.app/api/articles"
+          //"http://localhost:3001/api/articles"
         );
   
         // Extract the articles from the API response data
