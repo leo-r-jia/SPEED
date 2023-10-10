@@ -7,9 +7,13 @@ interface SortableTableProps {
   data: any[];
 }
 
-const formatAuthors = (authors: string[]) => {
-  return authors.join(", "); // Join authors with a comma and space
-};
+const formatAuthors = (authors: string[] | undefined) => {
+    if (authors && authors.length > 0) {
+      return authors.join(", "); // Join authors with a comma and space
+    }
+    return ""; // Return an empty string if authors is undefined or empty
+  };
+  
 
 const formatDateString = (dateString: string) => {
   const date = new Date(dateString);
@@ -24,7 +28,7 @@ const formatDateString = (dateString: string) => {
   return date.toLocaleDateString(undefined, options);
 };
 
-const ModeratorSortableTable: React.FC<SortableTableProps> = ({
+const AnalystSortableTable: React.FC<SortableTableProps> = ({
   headers,
   data,
 }) => {
@@ -35,19 +39,22 @@ const ModeratorSortableTable: React.FC<SortableTableProps> = ({
 
   const [expandedRowIndex, setExpandedRowIndex] = useState<number | null>(null);
 
-// Inside handleApprove function
+  const [editedSummary, setEditedSummary] = useState("");
+
+
+// Inside handleApprove function for analysts
 const handleApprove = async (index: number) => {
   const article = data[index];
   try {
-    // Send a POST request to the server to approve the article as a moderator
+    // Send a POST request to the server to approve the article as an analyst
     const response = await axios.post(
-      `https://speed-backend-git-testing-leo-r-jia.vercel.app/api/articles/approveArticle?_id=${article._id}`, // Use '_id' field in the URL
-      { "approved": true, "role": "moderator" } // Include the role in the request body
+      `https://speed-backend-git-testing-leo-r-jia.vercel.app/api/articles/approveArticle?_id=${article._id}`,
+      { "approved": true, "role": "analyst" } // Include the role in the request body
     );
     // Log the response for debugging
     console.log('Approve Response:', response);
     // Update the article in the state with the data returned by the server
-    alert("Summary Approved Successfully by Moderator! Now passed on for Analysis.");
+    alert("Article Approved Successfully by Analyst! Now viewable by users.");
     setExpandedRowIndex(null);
   } catch (error) {
     // Log the error for debugging
@@ -62,7 +69,7 @@ const handleReject = async (index: number) => {
   try {
     // Send a POST request to the server to reject the article
     const response = await axios.post(
-      `https://speed-backend-git-testing-leo-r-jia.vercel.app/api/articles/rejectArticle?_id=${article._id}`, // Use '_id' field in the URL
+      `https://speed-backend-git-testing-leo-r-jia.vercel.app/api/articles/rejectArticle?_id=${article._id}`, 
       { "rejected": true }
     );
     // Log the response for debugging
@@ -76,9 +83,30 @@ const handleReject = async (index: number) => {
   }
 }; 
 
+  // Function to handle editing the summary
+  const handleEditSummary = async (index: number) => {
+    const article = data[index];
+    try {
+      // Send a POST request to the server to update the summary
+      const response = await axios.post(
+        `https://speed-backend-git-testing-leo-r-jia.vercel.app/api/articles/submitSummary?_id=${article._id}`,
+        { "summary": editedSummary } // Send the edited summary
+      );
+      // Log the response for debugging
+      console.log('Update Summary Response:', response);
+      alert("Summary Updated Successfully");
+      setExpandedRowIndex(null);
+      
+    // Clear the editedSummary when the row is closed or changed
+      setEditedSummary("");
+    } catch (error) {
+      // Log the error for debugging
+      console.error('Update Summary Error:', error);
+    }
+  };
+
   // Function to handle header click and update sorting state
   const handleSort = (column: string) => {
-      // Close the expanded section when sorting is triggered
     setExpandedRowIndex(null);
     // If clicking on the same column, toggle sorting direction
     if (sortConfig.key === column) {
@@ -169,6 +197,11 @@ const handleReject = async (index: number) => {
             {expandedRowIndex === i && (
               <tr>
                 <td colSpan={headers.length}>
+                  <textarea
+                    value={editedSummary}
+                    onChange={(e) => setEditedSummary(e.target.value)}
+                  />
+                  <button onClick={() => handleEditSummary(i)}>Save Summary</button>
                   <button onClick={() => handleApprove(i)}>Approve</button>
                   <button onClick={() => handleReject(i)}>Reject</button>
                 </td>
@@ -180,5 +213,5 @@ const handleReject = async (index: number) => {
     </table>
   );
 };
-  
-export default ModeratorSortableTable;
+
+export default AnalystSortableTable;
