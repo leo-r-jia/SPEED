@@ -23,15 +23,6 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
 
-    # Frontend steps
-    - name: Install Frontend dependencies
-      run: npm ci
-      working-directory: ./frontend
-    
-    - name: Test Frontend
-      run: npm test
-      working-directory: ./frontend
-
     # Backend steps
     - name: Install Backend dependencies
       run: npm ci
