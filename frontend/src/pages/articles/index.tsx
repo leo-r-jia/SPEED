@@ -1,4 +1,4 @@
-import { GetStaticProps, NextPage } from "next";
+import { GetServerSideProps, NextPage } from "next";
 import SortableTable from "../../components/table/SortableTable";
 import axios from "axios";
 import styles from "./UserView.module.scss";
@@ -59,33 +59,6 @@ const Articles: NextPage<ArticlesProps> = ({ articles: initialArticles }) => {
       .includes(searchValue.toLowerCase());
   });
 
-  
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // Fetch articles from the API endpoint
-        const response = await axios.get(
-          "https://speed-backend-git-testing-leo-r-jia.vercel.app/api/articles"
-        );
-
-        // Extract the articles from the API response data
-        const articles: ArticlesInterface[] = response.data;
-
-        // Filter the articles to only include approved ones
-        const approvedArticles = articles.filter(
-          (article) => article.analystApproved === true && article.moderatorApproved === true
-        );
-
-        setArticles(approvedArticles);
-      } catch (error) {
-        console.error("Error fetching data from the API:", error);
-      }
-    };
-
-    fetchData(); // Call the fetchData function when the component mounts
-  }, []); // The empty dependency array ensures this useEffect runs once on mount
-
-
   return (
     <div className={styles.container}>
       <h1>SPEED Articles</h1>
@@ -126,7 +99,7 @@ const Articles: NextPage<ArticlesProps> = ({ articles: initialArticles }) => {
   );
 };
 
-export const getStaticProps: GetStaticProps<ArticlesProps> = async (_) => {
+export const getServerSideProps: GetServerSideProps<ArticlesProps> = async (_) => {
   try {
     // Fetch articles from the API endpoint
     const response = await axios.get(

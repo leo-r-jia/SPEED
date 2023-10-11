@@ -1,6 +1,6 @@
 // moderator.tsx
 
-import { GetStaticProps, NextPage } from "next";
+import { GetServerSideProps, NextPage } from "next";
 import data from "../../utils/dummydata.json";
 import ModeratorSortableTable from "../../components/table/ModeratorSortableTable";
 import { useState, useEffect } from "react";
@@ -86,29 +86,6 @@ const filteredAllArticles = filterBySearchValue(articles);
     { key: "submission_date", label: "Submission Date" }
   ];
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // Fetch all articles from the API endpoint without filtering
-        const response = await axios.get(
-          "https://speed-backend-git-testing-leo-r-jia.vercel.app/api/articles"
-          //"http://localhost:3001/api/articles"
-        );
-  
-        // Extract the articles from the API response data
-        const articles: ArticlesInterface[] = response.data;
-  
-        // Update the state with all articles
-        setArticles(articles);
-      } catch (error) {
-        console.error("Error fetching data from the API:", error);
-      }
-    };
-  
-    fetchData(); // Call the fetchData function when the component mounts
-  }, []); // The empty dependency array ensures this useEffect runs once on mount
-  
-
   return (
     <div className={styles.container}>
       <h1>SPEED Moderator Dashboard</h1>
@@ -167,7 +144,7 @@ const filteredAllArticles = filterBySearchValue(articles);
   );
 };
 
-export const getStaticProps: GetStaticProps<ArticlesProps> = async (_) => {
+export const getServerSideProps: GetServerSideProps<ArticlesProps> = async (_) => {
   try {
     // Fetch articles from the API endpoint
     const response = await axios.get(
