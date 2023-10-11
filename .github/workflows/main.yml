@@ -1,0 +1,42 @@
+name: CI for Frontend and Backend
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x]
+        
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+        
+    - name: Set up Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    # Frontend steps
+    - name: Install Frontend dependencies
+      run: npm ci
+      working-directory: ./frontend
+    
+    - name: Test Frontend
+      run: npm run test
+      working-directory: ./frontend
+
+    # Backend steps
+    - name: Install Backend dependencies
+      run: npm ci
+      working-directory: ./backend
+    
+    - name: Test Backend
+      run: npm run test
+      working-directory: ./backend
