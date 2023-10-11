@@ -31,7 +31,7 @@ type ArticlesProps = {
 const Articles: NextPage<ArticlesProps> = ({ articles: initialArticles }) => {
   const [searchValue, setSearchValue] = useState("");
   const [searchBy, setSearchBy] = useState<"title" | "authors" | "source">("title");
-  const [articles, setArticles] = useState(initialArticles); // Store articles in state
+  const [articles] = useState(initialArticles); 
 
   const approvedArticles = articles.filter(
     (article) => article.analystApproved === true && article.moderatorApproved === true

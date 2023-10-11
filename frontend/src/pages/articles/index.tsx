@@ -14,6 +14,7 @@ interface ArticlesInterface {
   doi: string;
   SE_practice: string;
   claim: string;
+  evidence: string; 
   averageRating: string;
   approved: boolean;
   analystApproved: boolean; 
@@ -28,8 +29,7 @@ const Articles: NextPage<ArticlesProps> = ({ articles: initialArticles }) => {
   const [searchValue, setSearchValue] = useState("");
   const [searchBy, setSearchBy] = useState<"title" | "authors" | "source">("title");
 
-  const [articles, setArticles] = useState(initialArticles); // Store articles in state
-
+  const [articles] = useState(initialArticles);
 
   const [selectedColumns, setSelectedColumns] = useState<string[]>([
     "title",
@@ -39,7 +39,8 @@ const Articles: NextPage<ArticlesProps> = ({ articles: initialArticles }) => {
     "doi",
     "SE_practice",
     "claim",
-    "averageRating",
+    "evidence", 
+    "averageRating", 
   ]);
 
   const headers: { key: keyof ArticlesInterface; label: string }[] = [
@@ -50,6 +51,7 @@ const Articles: NextPage<ArticlesProps> = ({ articles: initialArticles }) => {
     { key: "doi", label: "DOI" },
     { key: "SE_practice", label: "SE Practice" },
     { key: "claim", label: "Claim" },
+    { key: "evidence", label: "Result of Evidence" },
     { key: "averageRating", label: "Rating" },
   ];
 
