@@ -79,4 +79,15 @@
 
   }
 
+  .expandedContent {
+    padding: 0px; 
+  }
+  
+  .summaryHeader {
+    margin-top: 0;  // Removing top margin
+    margin-bottom: 4px;  // Adjust bottom margin as per your needs
+    color: #333;
+    font-weight: 600;
+  }
+
 }

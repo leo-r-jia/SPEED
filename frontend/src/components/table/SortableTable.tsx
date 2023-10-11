@@ -138,22 +138,27 @@ const SortableTable: React.FC<SortableTableProps> = ({
             </tr>
             {/* Expanded row with Rating */}
             {expandedRowIndex === i && (
-              <tr>
-                <td colSpan={selectedColumns.length}>
-                  <div className={styles.submitRating}>
-                    <Rating
-                      value={value}
-                      onChange={(event, newValue) => {
-                        setValue(newValue);
-                      }}
-                    />
-                    <button onClick={() => handleRatingSubmission(i, value)}>
-                      Submit Rating
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            )}
+  <tr>
+    <td colSpan={selectedColumns.length}>
+      <div className={styles.expandedContent}>
+        <h5 className={styles.summaryHeader}>Analyst Summary:</h5>
+        <p className={styles.summaryText}>{row.summary}</p>
+        <div className={styles.submitRating}>
+          <Rating
+            value={value}
+            onChange={(event, newValue) => {
+              setValue(newValue);
+            }}
+          />
+          <button onClick={() => handleRatingSubmission(i, value)}>
+            Submit Rating
+          </button>
+        </div>
+      </div>
+    </td>
+  </tr>
+)}
+
           </React.Fragment>
         ))}
       </tbody>
