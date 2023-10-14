@@ -7,8 +7,11 @@ interface SortableTableProps {
   data: any[];
 }
 
-const formatAuthors = (authors: string[]) => {
-  return authors.join(", "); // Join authors with a comma and space
+const formatAuthors = (authors: string | string[]) => {
+  if (Array.isArray(authors)) {
+    return authors.join(", "); // Join authors with a comma and space
+  }
+  return authors; // It's already a string, so no need to join
 };
 
 const formatDateString = (dateString: string) => {

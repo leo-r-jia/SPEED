@@ -33,27 +33,27 @@ const ColumnDropdown: React.FC<ColumnDropdownProps> = ({
     };
   
     return (
-<div className={`${styles["column-dropdown"]} ${isOpen ? styles["open"] : ""}`}>
-  <div className={styles["dropdown-toggle"]} onClick={toggleDropdown}>
-    Select Columns
-  </div>
-  {isOpen && (
-    <ul className={styles["dropdown-options"]}>
-      {options.map((option) => (
-        <li
-          key={option.key}
-          onClick={() => toggleOption(option.key)}
-          className={`${selectedOptions.includes(option.key) ? styles["selected"] : ""}`}
-        >
-          {option.label}
-          {selectedOptions.includes(option.key) && (
-            <span className={styles["checkmark"]}>&#10003;</span>
-          )}
-        </li>
-      ))}
-    </ul>
-  )}
-</div>
+      <div className={`${styles["column-dropdown"]} ${isOpen ? styles["open"] : ""}`}>
+        <div className={styles["dropdown-toggle"]} onClick={toggleDropdown}>
+          Select Columns
+        </div>
+        {isOpen && (
+          <ul className={styles["dropdown-options"]}>
+            {options.map((option) => (
+              <li
+                key={option.key}
+                onClick={() => toggleOption(option.key)}
+                className={`${selectedOptions.includes(option.key) ? styles["selected"] : ""}`}
+              >
+                {option.label}
+                {selectedOptions.includes(option.key) && (
+                  <span className={styles["checkmark"]}>&#10003;</span>
+                )}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     );
   };
   
