@@ -7,9 +7,9 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import ColumnDropdown from "./ColumnDropdown";
 import styles from "./ModeratorView.module.scss";
-import SearchBar from "@/components/search/SearchBar";
+import SearchBar from "../../components/search/SearchBar";
 
-interface ArticlesInterface {
+export interface ArticlesInterface {
   id: string;
   title: string;
   authors: string;
@@ -26,7 +26,7 @@ interface ArticlesInterface {
   analystApproved: boolean; 
 }
 
-type ArticlesProps = {
+export type ArticlesProps = {
   articles: ArticlesInterface[];
 };
 
