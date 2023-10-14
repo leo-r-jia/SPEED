@@ -79,3 +79,17 @@
     flex-grow: 0;
     font-size: 1.5em;
 }
+
+.warning {
+    color: red;
+    margin: 0;
+    align-self: center;
+    display: none;
+}
+
+.submitSuccessful {
+    color: #225a1d;
+    margin: 0;
+    align-self: center;
+    display: none;
+}

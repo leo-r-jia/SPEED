@@ -7,8 +7,24 @@ interface SortableTableProps {
   data: any[];
 }
 
-const formatAuthors = (authors: string[]) => {
-  return authors.join(", "); // Join authors with a comma and space
+const formatAuthors = (authors: string | string[]) => {
+  if (Array.isArray(authors)) {
+    return authors.join(", "); // Join authors with a comma and space
+  }
+  return authors; // It's already a string, so no need to join
+};
+
+const formatDateString = (dateString: string) => {
+  const date = new Date(dateString);
+  const options: Intl.DateTimeFormatOptions = {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  };
+  return date.toLocaleDateString(undefined, options);
 };
 
 const ModeratorSortableTable: React.FC<SortableTableProps> = ({
@@ -26,21 +42,22 @@ const ModeratorSortableTable: React.FC<SortableTableProps> = ({
 const handleApprove = async (index: number) => {
   const article = data[index];
   try {
-    // Send a POST request to the server to approve the article
+    // Send a POST request to the server to approve the article as a moderator
     const response = await axios.post(
       `https://speed-backend-git-testing-leo-r-jia.vercel.app/api/articles/approveArticle?_id=${article._id}`, // Use '_id' field in the URL
-      { "approved": true }
+      { "approved": true, "role": "moderator" } // Include the role in the request body
     );
     // Log the response for debugging
     console.log('Approve Response:', response);
     // Update the article in the state with the data returned by the server
-    data[index] = response.data;
+    alert("Summary Approved Successfully by Moderator! Now passed on for Analysis.");
     setExpandedRowIndex(null);
   } catch (error) {
     // Log the error for debugging
     console.error('Approve Error:', error);
   }
 };
+
 
 // Inside handleReject function
 const handleReject = async (index: number) => {
@@ -54,7 +71,7 @@ const handleReject = async (index: number) => {
     // Log the response for debugging
     console.log('Reject Response:', response);
     // Update the article in the state with the data returned by the server
-    data[index] = response.data;
+    alert("Article Rejected Successfully.");
     setExpandedRowIndex(null);
   } catch (error) {
     // Log the error for debugging
@@ -64,6 +81,8 @@ const handleReject = async (index: number) => {
 
   // Function to handle header click and update sorting state
   const handleSort = (column: string) => {
+      // Close the expanded section when sorting is triggered
+    setExpandedRowIndex(null);
     // If clicking on the same column, toggle sorting direction
     if (sortConfig.key === column) {
       const newDirection =
@@ -78,7 +97,7 @@ const handleReject = async (index: number) => {
   // Get the sorting indicator (arrow) based on the sorting direction
   const getSortingIndicator = (columnKey: string) => {
     if (columnKey === sortConfig.key) {
-      return sortConfig.direction === "ascending" ? "▲" : "▼"; // Up arrow or down arrow
+      return sortConfig.direction === "ascending" ? "▼" : "▲"; // Up arrow or down arrow
     }
     return ""; // No arrow for other columns
   };
@@ -139,10 +158,16 @@ const handleReject = async (index: number) => {
               key={i} 
               onClick={() => setExpandedRowIndex(expandedRowIndex === i ? null : i)} // Toggle expanded row
             >
-              {headers.map((header) => (
-                <td key={header.key}>{row[header.key]}</td>
-              ))}
-            </tr>
+      {headers.map((header) => (
+        <td key={header.key}>
+          {header.key === "submission_date"
+            ? formatDateString(row[header.key])
+            : header.key === "authors"
+            ? formatAuthors(row[header.key]) // Format authors using formatAuthors function
+            : row[header.key]}
+        </td>
+      ))}
+    </tr>
             {/* Expanded Section */}
             {expandedRowIndex === i && (
               <tr>

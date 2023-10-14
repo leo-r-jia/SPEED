@@ -1,3 +1,4 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": "next/core-web-vitals",
+  "ignorePatterns": ["postcss.config.js", "jest.config.js", "setupTests.js"]// Exclude postcss.config.js from ESLint processing
 }
