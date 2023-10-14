@@ -1,5 +1,5 @@
 import { render, fireEvent, screen, within } from "@testing-library/react";
-import Articles, { ArticlesProps, ArticlesInterface,} from "../../../src/pages/articles/moderator";
+import Articles, { ArticlesProps, ArticlesInterface } from "../../../src/pages/articles/moderator";
 import "@testing-library/jest-dom";
 
 describe("My Test Suite", () => {

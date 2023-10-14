@@ -3,6 +3,7 @@
     "axios": "^1.5.1"
   },
   "devDependencies": {
-    "@testing-library/react": "^14.0.0"
+    "@testing-library/react": "^14.0.0",
+    "@types/jest": "^29.5.5"
   }
 }
