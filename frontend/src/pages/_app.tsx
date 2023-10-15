@@ -1,15 +1,15 @@
-import "../styles/globals.scss";
 import type { AppProps } from "next/app";
-import { SessionProvider } from "next-auth/react";
-import PopulatedNavbar from "../components/PopulatedNavBar";
+import PopulatedNavbar from "../app/components/PopulatedNavBar";
+import AuthProvider from "@/app/context/AuthProvider";
+
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
 
     return (
-        <>
-            <PopulatedNavbar/>
+        <AuthProvider>
+            <PopulatedNavbar />
             <Component {...pageProps} />
-        </>
+        </AuthProvider>
     );
 }
 

@@ -1,11 +1,10 @@
 import { GetServerSideProps, NextPage } from "next";
-import data from "../../utils/dummydata.json";
-import AnalystSortableTable from "../../components/table/AnalystSortableTable";
+import AnalystSortableTable from "../../app/components/table/AnalystSortableTable";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import ColumnDropdown from "./ColumnDropdown";
 import styles from "./ModeratorView.module.scss";
-import SearchBar from "@/components/search/SearchBar";
+import SearchBar from "../../app/components/search/SearchBar";
 
 interface ArticlesInterface {
   id: string;
@@ -20,7 +19,7 @@ interface ArticlesInterface {
   approved: boolean;
   rejected: boolean;
   submission_date: string;
-  moderatorApproved: boolean; 
+  moderatorApproved: boolean;
   analystApproved: boolean;
 }
 
@@ -31,18 +30,18 @@ type ArticlesProps = {
 const Articles: NextPage<ArticlesProps> = ({ articles: initialArticles }) => {
   const [searchValue, setSearchValue] = useState("");
   const [searchBy, setSearchBy] = useState<"title" | "authors" | "source">("title");
-  const [articles] = useState(initialArticles); 
+  const [articles] = useState(initialArticles);
 
   const approvedArticles = articles.filter(
     (article) => article.analystApproved === true && article.moderatorApproved === true
   );
-    const rejectedArticles = articles.filter(article => article.rejected === true);
-    const analystQueueArticles = articles.filter(
-      (article) =>
-        article.analystApproved === false &&
-        article.moderatorApproved === true &&
-        article.rejected === false
-    );
+  const rejectedArticles = articles.filter(article => article.rejected === true);
+  const analystQueueArticles = articles.filter(
+    (article) =>
+      article.analystApproved === false &&
+      article.moderatorApproved === true &&
+      article.rejected === false
+  );
 
   const [activeTab, setActiveTab] = useState('analystQueue');
 
@@ -52,11 +51,11 @@ const Articles: NextPage<ArticlesProps> = ({ articles: initialArticles }) => {
       return String(article[searchBy]).toLowerCase().includes(searchValue.toLowerCase());
     });
   };
-  
-const filteredanalystQueueArticles = filterBySearchValue(analystQueueArticles);
-const filteredApprovedArticles = filterBySearchValue(approvedArticles);
-const filteredRejectedArticles = filterBySearchValue(rejectedArticles);
-const filteredAllArticles = filterBySearchValue(articles);
+
+  const filteredanalystQueueArticles = filterBySearchValue(analystQueueArticles);
+  const filteredApprovedArticles = filterBySearchValue(approvedArticles);
+  const filteredRejectedArticles = filterBySearchValue(rejectedArticles);
+  const filteredAllArticles = filterBySearchValue(articles);
 
   const [selectedColumns, setSelectedColumns] = useState<string[]>([
     "id", "title", "authors", "source", "publication_year",
@@ -99,10 +98,10 @@ const filteredAllArticles = filterBySearchValue(articles);
       <button onClick={() => setActiveTab('all')}>All</button>
 
       {activeTab === 'analystQueue' && (
-      <AnalystSortableTable
-        headers={headers.filter((header) => selectedColumns.includes(header.key))}
-        data={filteredanalystQueueArticles}
-      />
+        <AnalystSortableTable
+          headers={headers.filter((header) => selectedColumns.includes(header.key))}
+          data={filteredanalystQueueArticles}
+        />
       )}
       {activeTab === 'approved' && (
         <AnalystSortableTable

@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from "../../pages/articles/UserView.module.scss"
+import styles from "../../../pages/articles/UserView.module.scss"
 
 interface SearchBarProps {
     value: string;

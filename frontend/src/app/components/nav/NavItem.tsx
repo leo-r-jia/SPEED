@@ -1,4 +1,5 @@
-import { useRouter } from "next/router";
+"use client";
+import { useRouter } from "next/navigation";
 import React from "react";
 import styles from "./Nav.module.scss";
 
@@ -13,6 +14,7 @@ type Props = {
 
 const NavItem = ({ children, route, end, dropdown, onClick, style }: Props) => {
     const router = useRouter();
+
     const navigate: React.MouseEventHandler<HTMLDivElement> = (event) => {
         if (typeof route === "string") {
             router.push(route);

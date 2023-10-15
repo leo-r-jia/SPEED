@@ -1,5 +1,5 @@
 import { FormEvent, useState, useRef } from "react";
-import formStyles from "../../styles/Form.module.scss";
+import formStyles from "../../app/styles/Form.module.scss";
 
 const NewArticle = () => {
     // Const for article details

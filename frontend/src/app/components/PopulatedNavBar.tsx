@@ -3,7 +3,6 @@ import NavItem from "./nav/NavItem";
 import styles from "./PopulatedNavBar.module.scss";
 
 const PopulatedNavBar = () => {
-
     return (
         <NavBar>
             <div className={styles.heading}>
@@ -26,9 +25,6 @@ const PopulatedNavBar = () => {
             </NavItem>
         </NavBar>
     );
-
 };
-
-
 
 export default PopulatedNavBar; 
