@@ -12,18 +12,37 @@
 }
 
 .searchBar {
-    width: 30%; 
-    padding: 15px;  
-    font-size: 18px; 
+    width: 30%;
+    padding: 5px;
+    font-size: 14px;
+    border: 1px #ccc solid;
     border-radius: 5px;
-    border: 1px solid #ccc; 
+    margin-right: 12px;
+
+    &:hover {
+        background-color: #00000010;
+        border-color: #cccccc;
+        transition: all 0.3s;
+    }
+
+    &:focus {
+        border-color: none;
+        outline: #2f3e46 1px solid;
+        transition: all 0.3s ease-in-out;
+    }
 }
 
 .searchDropdown {
-    height: 58px; 
-    border: 1px solid #ccc;  
+    height: 31.5px;
+    border: 1px solid #ccc;
     border-radius: 5px;
-    padding: 8px; 
-    font-size: 1rem; 
-  }
-  
+    padding: 2px;
+    font-size: 1rem;
+
+    &:hover {
+        background-color: #00000010;
+        border-color: #cccccc;
+        transition: all 0.3s;
+        cursor: pointer;
+    }
+}

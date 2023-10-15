@@ -8,12 +8,12 @@ interface SortableTableProps {
 }
 
 const formatAuthors = (authors: string[] | undefined) => {
-    if (authors && authors.length > 0) {
-      return authors.join(", "); // Join authors with a comma and space
-    }
-    return ""; // Return an empty string if authors is undefined or empty
-  };
-  
+  if (authors && authors.length > 0) {
+    return authors.join(", "); // Join authors with a comma and space
+  }
+  return ""; // Return an empty string if authors is undefined or empty
+};
+
 
 const formatDateString = (dateString: string) => {
   const date = new Date(dateString);
@@ -42,46 +42,46 @@ const AnalystSortableTable: React.FC<SortableTableProps> = ({
   const [editedSummary, setEditedSummary] = useState("");
 
 
-// Inside handleApprove function for analysts
-const handleApprove = async (index: number) => {
-  const article = data[index];
-  try {
-    // Send a POST request to the server to approve the article as an analyst
-    const response = await axios.post(
-      `https://speed-backend-git-testing-leo-r-jia.vercel.app/api/articles/approveArticle?_id=${article._id}`,
-      { "approved": true, "role": "analyst" } // Include the role in the request body
-    );
-    // Log the response for debugging
-    console.log('Approve Response:', response);
-    // Update the article in the state with the data returned by the server
-    alert("Article Approved Successfully by Analyst! Now viewable by users.");
-    setExpandedRowIndex(null);
-  } catch (error) {
-    // Log the error for debugging
-    console.error('Approve Error:', error);
-  }
-};
+  // Inside handleApprove function for analysts
+  const handleApprove = async (index: number) => {
+    const article = data[index];
+    try {
+      // Send a POST request to the server to approve the article as an analyst
+      const response = await axios.post(
+        `https://speed-backend-git-testing-leo-r-jia.vercel.app/api/articles/approveArticle?_id=${article._id}`,
+        { "approved": true, "role": "analyst" } // Include the role in the request body
+      );
+      // Log the response for debugging
+      console.log('Approve Response:', response);
+      // Update the article in the state with the data returned by the server
+      alert("Article Approved Successfully by Analyst! Now viewable by users.");
+      setExpandedRowIndex(null);
+    } catch (error) {
+      // Log the error for debugging
+      console.error('Approve Error:', error);
+    }
+  };
 
 
-// Inside handleReject function
-const handleReject = async (index: number) => {
-  const article = data[index];
-  try {
-    // Send a POST request to the server to reject the article
-    const response = await axios.post(
-      `https://speed-backend-git-testing-leo-r-jia.vercel.app/api/articles/rejectArticle?_id=${article._id}`, 
-      { "rejected": true }
-    );
-    // Log the response for debugging
-    console.log('Reject Response:', response);
-    // Update the article in the state with the data returned by the server
-    alert("Article Rejected Successfully.");
-    setExpandedRowIndex(null);
-  } catch (error) {
-    // Log the error for debugging
-    console.error('Reject Error:', error);
-  }
-}; 
+  // Inside handleReject function
+  const handleReject = async (index: number) => {
+    const article = data[index];
+    try {
+      // Send a POST request to the server to reject the article
+      const response = await axios.post(
+        `https://speed-backend-git-testing-leo-r-jia.vercel.app/api/articles/rejectArticle?_id=${article._id}`,
+        { "rejected": true }
+      );
+      // Log the response for debugging
+      console.log('Reject Response:', response);
+      // Update the article in the state with the data returned by the server
+      alert("Article Rejected Successfully.");
+      setExpandedRowIndex(null);
+    } catch (error) {
+      // Log the error for debugging
+      console.error('Reject Error:', error);
+    }
+  };
 
   // Function to handle editing the summary
   const handleEditSummary = async (index: number) => {
@@ -96,8 +96,8 @@ const handleReject = async (index: number) => {
       console.log('Update Summary Response:', response);
       alert("Summary Updated Successfully");
       setExpandedRowIndex(null);
-      
-    // Clear the editedSummary when the row is closed or changed
+
+      // Clear the editedSummary when the row is closed or changed
       setEditedSummary("");
     } catch (error) {
       // Log the error for debugging
@@ -179,31 +179,36 @@ const handleReject = async (index: number) => {
       <tbody>
         {sortedData.map((row, i) => (
           <>
-            <tr 
-              key={i} 
+            <tr
+              key={i}
               onClick={() => setExpandedRowIndex(expandedRowIndex === i ? null : i)} // Toggle expanded row
             >
-      {headers.map((header) => (
-        <td key={header.key}>
-          {header.key === "submission_date"
-            ? formatDateString(row[header.key])
-            : header.key === "authors"
-            ? formatAuthors(row[header.key]) // Format authors using formatAuthors function
-            : row[header.key]}
-        </td>
-      ))}
-    </tr>
+              {headers.map((header) => (
+                <td key={header.key}>
+                  {header.key === "submission_date"
+                    ? formatDateString(row[header.key])
+                    : header.key === "authors"
+                      ? formatAuthors(row[header.key]) // Format authors using formatAuthors function
+                      : row[header.key]}
+                </td>
+              ))}
+            </tr>
             {/* Expanded Section */}
             {expandedRowIndex === i && (
               <tr>
                 <td colSpan={headers.length}>
-                  <textarea
-                    value={editedSummary}
-                    onChange={(e) => setEditedSummary(e.target.value)}
-                  />
-                  <button onClick={() => handleEditSummary(i)}>Save Summary</button>
-                  <button onClick={() => handleApprove(i)}>Approve</button>
-                  <button onClick={() => handleReject(i)}>Reject</button>
+                  <span className={styles.analystExpandedSection}>
+                    <textarea
+                      placeholder="Add a summary"
+                      value={editedSummary}
+                      onChange={(e) => setEditedSummary(e.target.value)}
+                    />
+                    <span className={styles.buttonsSection}>
+                      <button onClick={() => handleEditSummary(i)}>Save Summary</button>
+                      <button onClick={() => handleApprove(i)}>Approve</button>
+                      <button onClick={() => handleReject(i)}>Reject</button>
+                    </span>
+                  </span>
                 </td>
               </tr>
             )}
