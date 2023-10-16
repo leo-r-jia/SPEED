@@ -88,57 +88,61 @@ const Articles: NextPage<ArticlesProps> = ({ articles: initialArticles }) => {
   return (
     <div className={styles.container}>
       <h1>SPEED Moderator Dashboard</h1>
-      <SearchBar
-        value={searchValue}
-        onChange={setSearchValue}
-        searchBy={searchBy}
-        onSearchByChange={setSearchBy}
-      />
-      <ColumnDropdown
-        options={headers.map((header) => ({
-          key: header.key,
-          label: header.label,
-        }))}
-        selectedOptions={selectedColumns}
-        onSelect={(selected) => setSelectedColumns(selected)}
-      />
-
-      <button onClick={() => setActiveTab('submitted')}>Submitted</button>
-      <button onClick={() => setActiveTab('analystQueue')}>Analyst Queue</button>
-      <button onClick={() => setActiveTab('approved')}>Approved</button>
-      <button onClick={() => setActiveTab('rejected')}>Rejected</button>
-      <button onClick={() => setActiveTab('all')}>All</button>
-
-      {activeTab === 'submitted' && (
-        <ModeratorSortableTable
-          headers={headers.filter((header) => selectedColumns.includes(header.key))}
-          data={filteredSubmittedArticles}
+      <div className={styles.searchBarContainer}>
+        <SearchBar
+          value={searchValue}
+          onChange={setSearchValue}
+          searchBy={searchBy}
+          onSearchByChange={setSearchBy}
         />
-      )}
-      {activeTab === 'analystQueue' && (
-        <ModeratorSortableTable
-          headers={headers.filter((header) => selectedColumns.includes(header.key))}
-          data={filteredanalystQueueArticles}
-        />
-      )}
-      {activeTab === 'approved' && (
-        <ModeratorSortableTable
-          headers={headers.filter((header) => selectedColumns.includes(header.key))}
-          data={filteredApprovedArticles}
-        />
-      )}
-      {activeTab === 'rejected' && (
-        <ModeratorSortableTable
-          headers={headers.filter((header) => selectedColumns.includes(header.key))}
-          data={filteredRejectedArticles}
-        />
-      )}
-      {activeTab === 'all' && (
-        <ModeratorSortableTable
-          headers={headers.filter((header) => selectedColumns.includes(header.key))}
-          data={filteredAllArticles}
-        />
-      )}
+        <div className={styles.searchBarSubContainer}>
+          <ColumnDropdown
+            options={headers.map((header) => ({
+              key: header.key,
+              label: header.label,
+            }))}
+            selectedOptions={selectedColumns}
+            onSelect={(selected) => setSelectedColumns(selected)}
+          />
+          <button onClick={() => setActiveTab('submitted')}>Submitted</button>
+          <button onClick={() => setActiveTab('analystQueue')}>Analyst Queue</button>
+          <button onClick={() => setActiveTab('approved')}>Approved</button>
+          <button onClick={() => setActiveTab('rejected')}>Rejected</button>
+          <button onClick={() => setActiveTab('all')}>All</button>
+        </div>
+      </div>
+      <div className={styles.tableContainer}>
+        {activeTab === 'submitted' && (
+          <ModeratorSortableTable
+            headers={headers.filter((header) => selectedColumns.includes(header.key))}
+            data={filteredSubmittedArticles}
+          />
+        )}
+        {activeTab === 'analystQueue' && (
+          <ModeratorSortableTable
+            headers={headers.filter((header) => selectedColumns.includes(header.key))}
+            data={filteredanalystQueueArticles}
+          />
+        )}
+        {activeTab === 'approved' && (
+          <ModeratorSortableTable
+            headers={headers.filter((header) => selectedColumns.includes(header.key))}
+            data={filteredApprovedArticles}
+          />
+        )}
+        {activeTab === 'rejected' && (
+          <ModeratorSortableTable
+            headers={headers.filter((header) => selectedColumns.includes(header.key))}
+            data={filteredRejectedArticles}
+          />
+        )}
+        {activeTab === 'all' && (
+          <ModeratorSortableTable
+            headers={headers.filter((header) => selectedColumns.includes(header.key))}
+            data={filteredAllArticles}
+          />
+        )}
+      </div>
     </div>
   );
 };

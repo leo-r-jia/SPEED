@@ -1,7 +1,6 @@
 .myTable {
   width: 100%;
   border-collapse: collapse;
-  border: 1px solid #ddd;
 
   th,
   td {
@@ -112,6 +111,13 @@
         outline: #2f3e46 1px solid;
         transition: all 0.3s ease-in-out;
       }
+    }
+  }
+
+  .rejectBtn {
+    background-color: #e2cbcb;
+    &:hover{
+          background-color: #cc7c7c;
     }
   }
 

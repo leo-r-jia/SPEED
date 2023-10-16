@@ -13,6 +13,7 @@
         font-size: 0.8rem;
         padding: 0em 0.5em 0.15em;
         margin: 0 5px 0 0;
+        height: 20px;
 
         &:hover {
             background-color: #84a98c;
@@ -26,4 +27,45 @@
 
 .container h1 {
     font-size: 1.5em;
+    color: #52796f;
+}
+
+.searchBarContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    background-color: #f2f2f2;
+    margin-bottom: 10px;
+    border-radius: 7px;
+    padding: 8px;
+}
+
+.searchBarSubContainer {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+
+    button {
+        border: 1px #979797 solid;
+        border-radius: 5px;
+        background-color: #cad2c5;
+        font-size: 0.8rem;
+        padding: 0em 0.5em 0.15em;
+        margin: 10px 0 0 0;
+        height: 20px;
+
+        &:hover {
+            background-color: #84a98c;
+            border-color: #cccccc;
+            color: white;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+    }
+}
+
+.tableContainer {
+    border-radius: 7px;
+    background-color: #f2f2f2;
+    padding: 8px;
 }

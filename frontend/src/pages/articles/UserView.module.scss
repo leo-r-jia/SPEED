@@ -9,10 +9,11 @@
 
 .container h1 {
     font-size: 1.5em;
+    color: #52796f;
 }
 
 .searchBar {
-    width: 30%;
+    width: 35%;
     padding: 5px;
     font-size: 14px;
     border: 1px #ccc solid;
@@ -33,6 +34,7 @@
 }
 
 .searchDropdown {
+    width: 5.5%;
     height: 31.5px;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -45,4 +47,27 @@
         transition: all 0.3s;
         cursor: pointer;
     }
+}
+
+.searchBarContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    background-color: #f2f2f2;
+    margin-bottom: 10px;
+    border-radius: 7px;
+    padding: 8px;
+}
+
+.tableContainer {
+    border-radius: 7px;
+    background-color: #f2f2f2;
+    padding: 8px;
+}
+
+.columnFilter {
+    accent-color: #52796f;
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
 }
