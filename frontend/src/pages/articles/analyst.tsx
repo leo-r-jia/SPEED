@@ -20,7 +20,7 @@ interface ArticlesInterface {
   approved: boolean;
   rejected: boolean;
   submission_date: string;
-  moderatorApproved: boolean; 
+  moderatorApproved: boolean;
   analystApproved: boolean;
 }
 
@@ -31,18 +31,18 @@ type ArticlesProps = {
 const Articles: NextPage<ArticlesProps> = ({ articles: initialArticles }) => {
   const [searchValue, setSearchValue] = useState("");
   const [searchBy, setSearchBy] = useState<"title" | "authors" | "source">("title");
-  const [articles] = useState(initialArticles); 
+  const [articles] = useState(initialArticles);
 
   const approvedArticles = articles.filter(
     (article) => article.analystApproved === true && article.moderatorApproved === true
   );
-    const rejectedArticles = articles.filter(article => article.rejected === true);
-    const analystQueueArticles = articles.filter(
-      (article) =>
-        article.analystApproved === false &&
-        article.moderatorApproved === true &&
-        article.rejected === false
-    );
+  const rejectedArticles = articles.filter(article => article.rejected === true);
+  const analystQueueArticles = articles.filter(
+    (article) =>
+      article.analystApproved === false &&
+      article.moderatorApproved === true &&
+      article.rejected === false
+  );
 
   const [activeTab, setActiveTab] = useState('analystQueue');
 
@@ -52,11 +52,11 @@ const Articles: NextPage<ArticlesProps> = ({ articles: initialArticles }) => {
       return String(article[searchBy]).toLowerCase().includes(searchValue.toLowerCase());
     });
   };
-  
-const filteredanalystQueueArticles = filterBySearchValue(analystQueueArticles);
-const filteredApprovedArticles = filterBySearchValue(approvedArticles);
-const filteredRejectedArticles = filterBySearchValue(rejectedArticles);
-const filteredAllArticles = filterBySearchValue(articles);
+
+  const filteredanalystQueueArticles = filterBySearchValue(analystQueueArticles);
+  const filteredApprovedArticles = filterBySearchValue(approvedArticles);
+  const filteredRejectedArticles = filterBySearchValue(rejectedArticles);
+  const filteredAllArticles = filterBySearchValue(articles);
 
   const [selectedColumns, setSelectedColumns] = useState<string[]>([
     "id", "title", "authors", "source", "publication_year",
@@ -78,51 +78,58 @@ const filteredAllArticles = filterBySearchValue(articles);
   return (
     <div className={styles.container}>
       <h1>SPEED Analyst Dashboard</h1>
-      <SearchBar
-        value={searchValue}
-        onChange={setSearchValue}
-        searchBy={searchBy}
-        onSearchByChange={setSearchBy}
-      />
-      <ColumnDropdown
-        options={headers.map((header) => ({
-          key: header.key,
-          label: header.label,
-        }))}
-        selectedOptions={selectedColumns}
-        onSelect={(selected) => setSelectedColumns(selected)}
-      />
+      <div className={styles.searchBarContainer}>
+        <SearchBar
+          value={searchValue}
+          onChange={setSearchValue}
+          searchBy={searchBy}
+          onSearchByChange={setSearchBy}
+        />
+        <div className={styles.searchBarSubContainer}>
+          <ColumnDropdown
+            options={headers.map((header) => ({
+              key: header.key,
+              label: header.label,
+            }))}
+            selectedOptions={selectedColumns}
+            onSelect={(selected) => setSelectedColumns(selected)}
+          />
+          <button onClick={() => setActiveTab('analystQueue')}>Analyst Queue</button>
+          <button onClick={() => setActiveTab('approved')}>Approved</button>
+          <button onClick={() => setActiveTab('rejected')}>Rejected</button>
+          <button onClick={() => setActiveTab('all')}>All</button>
+        </div>
+      </div>
 
-      <button onClick={() => setActiveTab('analystQueue')}>Analyst Queue</button>
-      <button onClick={() => setActiveTab('approved')}>Approved</button>
-      <button onClick={() => setActiveTab('rejected')}>Rejected</button>
-      <button onClick={() => setActiveTab('all')}>All</button>
+      <div className={styles.tableContainer}>
 
-      {activeTab === 'analystQueue' && (
-      <AnalystSortableTable
-        headers={headers.filter((header) => selectedColumns.includes(header.key))}
-        data={filteredanalystQueueArticles}
-      />
-      )}
-      {activeTab === 'approved' && (
-        <AnalystSortableTable
-          headers={headers.filter((header) => selectedColumns.includes(header.key))}
-          data={filteredApprovedArticles}
-        />
-      )}
-      {activeTab === 'rejected' && (
-        <AnalystSortableTable
-          headers={headers.filter((header) => selectedColumns.includes(header.key))}
-          data={filteredRejectedArticles}
-        />
-      )}
-      {activeTab === 'all' && (
-        <AnalystSortableTable
-          headers={headers.filter((header) => selectedColumns.includes(header.key))}
-          data={filteredAllArticles}
-        />
-      )}
+        {activeTab === 'analystQueue' && (
+          <AnalystSortableTable
+            headers={headers.filter((header) => selectedColumns.includes(header.key))}
+            data={filteredanalystQueueArticles}
+          />
+        )}
+        {activeTab === 'approved' && (
+          <AnalystSortableTable
+            headers={headers.filter((header) => selectedColumns.includes(header.key))}
+            data={filteredApprovedArticles}
+          />
+        )}
+        {activeTab === 'rejected' && (
+          <AnalystSortableTable
+            headers={headers.filter((header) => selectedColumns.includes(header.key))}
+            data={filteredRejectedArticles}
+          />
+        )}
+        {activeTab === 'all' && (
+          <AnalystSortableTable
+            headers={headers.filter((header) => selectedColumns.includes(header.key))}
+            data={filteredAllArticles}
+          />
+        )}
+      </div>
     </div>
+
   );
 };
 

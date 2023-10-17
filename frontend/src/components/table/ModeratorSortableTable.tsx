@@ -172,8 +172,8 @@ const handleReject = async (index: number) => {
             {expandedRowIndex === i && (
               <tr>
                 <td colSpan={headers.length}>
-                  <button onClick={() => handleApprove(i)}>Approve</button>
-                  <button onClick={() => handleReject(i)}>Reject</button>
+                  <button className={styles.approveBtn} onClick={() => handleApprove(i)}>Approve</button>
+                  <button className={styles.rejectBtn} onClick={() => handleReject(i)}>Reject</button>
                 </td>
               </tr>
             )}

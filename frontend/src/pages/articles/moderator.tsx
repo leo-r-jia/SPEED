@@ -1,7 +1,6 @@
 // moderator.tsx
 
 import { GetServerSideProps, NextPage } from "next";
-import data from "../../utils/dummydata.json";
 import ModeratorSortableTable from "../../components/table/ModeratorSortableTable";
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -22,8 +21,8 @@ export interface ArticlesInterface {
   approved: boolean;
   rejected: boolean;
   submission_date: string;
-  moderatorApproved: boolean; 
-  analystApproved: boolean; 
+  moderatorApproved: boolean;
+  analystApproved: boolean;
 }
 
 export type ArticlesProps = {
@@ -33,26 +32,26 @@ export type ArticlesProps = {
 const Articles: NextPage<ArticlesProps> = ({ articles: initialArticles }) => {
   const [searchValue, setSearchValue] = useState("");
   const [searchBy, setSearchBy] = useState<"title" | "authors" | "source">("title");
-  const [articles] = useState(initialArticles); 
+  const [articles] = useState(initialArticles);
 
 
   const approvedArticles = articles.filter(
     (article) => article.analystApproved === true && article.moderatorApproved === true
   );
-    const rejectedArticles = articles.filter(article => article.rejected === true);
-    const submittedArticles = articles.filter(
-      (article) =>
-        article.analystApproved === false &&
-        article.moderatorApproved === false &&
-        article.rejected === false
-    );
+  const rejectedArticles = articles.filter(article => article.rejected === true);
+  const submittedArticles = articles.filter(
+    (article) =>
+      article.analystApproved === false &&
+      article.moderatorApproved === false &&
+      article.rejected === false
+  );
 
-    const analystQueueArticles = articles.filter(
-      (article) =>
-        article.analystApproved === false &&
-        article.moderatorApproved === true &&
-        article.rejected === false
-    );
+  const analystQueueArticles = articles.filter(
+    (article) =>
+      article.analystApproved === false &&
+      article.moderatorApproved === true &&
+      article.rejected === false
+  );
   const [activeTab, setActiveTab] = useState('submitted');
 
 
@@ -61,13 +60,13 @@ const Articles: NextPage<ArticlesProps> = ({ articles: initialArticles }) => {
       return String(article[searchBy]).toLowerCase().includes(searchValue.toLowerCase());
     });
   };
-  
 
-const filteredApprovedArticles = filterBySearchValue(approvedArticles);
-const filteredRejectedArticles = filterBySearchValue(rejectedArticles);
-const filteredSubmittedArticles = filterBySearchValue(submittedArticles);
-const filteredanalystQueueArticles = filterBySearchValue(analystQueueArticles);
-const filteredAllArticles = filterBySearchValue(articles);
+
+  const filteredApprovedArticles = filterBySearchValue(approvedArticles);
+  const filteredRejectedArticles = filterBySearchValue(rejectedArticles);
+  const filteredSubmittedArticles = filterBySearchValue(submittedArticles);
+  const filteredanalystQueueArticles = filterBySearchValue(analystQueueArticles);
+  const filteredAllArticles = filterBySearchValue(articles);
 
   const [selectedColumns, setSelectedColumns] = useState<string[]>([
     "id", "title", "authors", "source", "publication_year",
@@ -89,57 +88,61 @@ const filteredAllArticles = filterBySearchValue(articles);
   return (
     <div className={styles.container}>
       <h1>SPEED Moderator Dashboard</h1>
-      <SearchBar
-        value={searchValue}
-        onChange={setSearchValue}
-        searchBy={searchBy}
-        onSearchByChange={setSearchBy}
-      />
-      <ColumnDropdown
-        options={headers.map((header) => ({
-          key: header.key,
-          label: header.label,
-        }))}
-        selectedOptions={selectedColumns}
-        onSelect={(selected) => setSelectedColumns(selected)}
-      />
-
-      <button onClick={() => setActiveTab('submitted')}>Submitted</button>
-      <button onClick={() => setActiveTab('analystQueue')}>Analyst Queue</button>
-      <button onClick={() => setActiveTab('approved')}>Approved</button>
-      <button onClick={() => setActiveTab('rejected')}>Rejected</button>
-      <button onClick={() => setActiveTab('all')}>All</button>
-
-      {activeTab === 'submitted' && (
-        <ModeratorSortableTable
-          headers={headers.filter((header) => selectedColumns.includes(header.key))}
-          data={filteredSubmittedArticles}
+      <div className={styles.searchBarContainer}>
+        <SearchBar
+          value={searchValue}
+          onChange={setSearchValue}
+          searchBy={searchBy}
+          onSearchByChange={setSearchBy}
         />
-      )}
-      {activeTab === 'analystQueue' && (
-      <ModeratorSortableTable
-        headers={headers.filter((header) => selectedColumns.includes(header.key))}
-        data={filteredanalystQueueArticles}
-      />
-      )}
-      {activeTab === 'approved' && (
-        <ModeratorSortableTable
-          headers={headers.filter((header) => selectedColumns.includes(header.key))}
-          data={filteredApprovedArticles}
-        />
-      )}
-      {activeTab === 'rejected' && (
-        <ModeratorSortableTable
-          headers={headers.filter((header) => selectedColumns.includes(header.key))}
-          data={filteredRejectedArticles}
-        />
-      )}
-      {activeTab === 'all' && (
-        <ModeratorSortableTable
-          headers={headers.filter((header) => selectedColumns.includes(header.key))}
-          data={filteredAllArticles}
-        />
-      )}
+        <div className={styles.searchBarSubContainer}>
+          <ColumnDropdown
+            options={headers.map((header) => ({
+              key: header.key,
+              label: header.label,
+            }))}
+            selectedOptions={selectedColumns}
+            onSelect={(selected) => setSelectedColumns(selected)}
+          />
+          <button onClick={() => setActiveTab('submitted')}>Submitted</button>
+          <button onClick={() => setActiveTab('analystQueue')}>Analyst Queue</button>
+          <button onClick={() => setActiveTab('approved')}>Approved</button>
+          <button onClick={() => setActiveTab('rejected')}>Rejected</button>
+          <button onClick={() => setActiveTab('all')}>All</button>
+        </div>
+      </div>
+      <div className={styles.tableContainer}>
+        {activeTab === 'submitted' && (
+          <ModeratorSortableTable
+            headers={headers.filter((header) => selectedColumns.includes(header.key))}
+            data={filteredSubmittedArticles}
+          />
+        )}
+        {activeTab === 'analystQueue' && (
+          <ModeratorSortableTable
+            headers={headers.filter((header) => selectedColumns.includes(header.key))}
+            data={filteredanalystQueueArticles}
+          />
+        )}
+        {activeTab === 'approved' && (
+          <ModeratorSortableTable
+            headers={headers.filter((header) => selectedColumns.includes(header.key))}
+            data={filteredApprovedArticles}
+          />
+        )}
+        {activeTab === 'rejected' && (
+          <ModeratorSortableTable
+            headers={headers.filter((header) => selectedColumns.includes(header.key))}
+            data={filteredRejectedArticles}
+          />
+        )}
+        {activeTab === 'all' && (
+          <ModeratorSortableTable
+            headers={headers.filter((header) => selectedColumns.includes(header.key))}
+            data={filteredAllArticles}
+          />
+        )}
+      </div>
     </div>
   );
 };
