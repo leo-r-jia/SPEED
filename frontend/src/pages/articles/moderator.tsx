@@ -31,7 +31,7 @@ export type ArticlesProps = {
 
 const Articles: NextPage<ArticlesProps> = ({ articles: initialArticles }) => {
   const [searchValue, setSearchValue] = useState("");
-  const [searchBy, setSearchBy] = useState<"title" | "authors" | "source">("title");
+  const [searchBy, setSearchBy] = useState<"title" | "authors" | "source" | "SE_practice">("title");
   const [articles] = useState(initialArticles);
 
 
