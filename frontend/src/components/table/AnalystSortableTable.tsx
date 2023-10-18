@@ -197,13 +197,13 @@ const handleReject = async (index: number) => {
             {expandedRowIndex === i && (
               <tr>
                 <td colSpan={headers.length}>
-                  <textarea
+                  <textarea className={styles.button}
                     value={editedSummary}
                     onChange={(e) => setEditedSummary(e.target.value)}
                   />
-                  <button onClick={() => handleEditSummary(i)}>Save Summary</button>
-                  <button onClick={() => handleApprove(i)}>Approve</button>
-                  <button onClick={() => handleReject(i)}>Reject</button>
+                  <button onClick={() => handleEditSummary(i)}className={styles.button}>Save Summary</button>
+                  <button onClick={() => handleApprove(i)}className={styles.button}>Approve</button>
+                  <button onClick={() => handleReject(i)}className={styles.button}>Reject</button>
                 </td>
               </tr>
             )}
