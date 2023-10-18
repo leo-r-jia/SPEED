@@ -92,11 +92,11 @@ const filteredAllArticles = filterBySearchValue(articles);
         selectedOptions={selectedColumns}
         onSelect={(selected) => setSelectedColumns(selected)}
       />
-
-      <button onClick={() => setActiveTab('analystQueue')}>Analyst Queue</button>
-      <button onClick={() => setActiveTab('approved')}>Approved</button>
-      <button onClick={() => setActiveTab('rejected')}>Rejected</button>
-      <button onClick={() => setActiveTab('all')}>All</button>
+      
+      <button onClick={() => setActiveTab('analystQueue')}className={styles.button}>Analyst Queue</button>
+      <button onClick={() => setActiveTab('approved')}className={styles.button}>Approved</button>
+      <button onClick={() => setActiveTab('rejected')}className={styles.button}>Rejected</button>
+      <button onClick={() => setActiveTab('all')}className={styles.button}>All</button>
 
       {activeTab === 'analystQueue' && (
       <AnalystSortableTable

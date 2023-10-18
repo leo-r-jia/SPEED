@@ -21,7 +21,7 @@
       top: 100%;
       left: 0;
       z-index: 1;
-      background-color: #fff;
+      background-color: black;
       border: 1px solid #ccc;
       border-top: none;
       list-style: none;
@@ -39,10 +39,10 @@
         align-items: center;
   
         &.selected {
-          background-color: #e1e1e1;
+          background-color: black;
   
           .checkmark {
-            color: black; /* Change the checkmark color to black */
+            color: white; /* Change the checkmark color to black */
           }
         }
   
