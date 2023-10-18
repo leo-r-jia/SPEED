@@ -5,13 +5,14 @@
     flex-direction: row;
     width: 100%;
     align-items: center;
-    color: #383838;
+    color: white;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-size: 1.1em;
     font-weight: bold;
     transition: top 0.5s;
     height: fit-content;
-    margin-left: -0.65em;
+    //margin-left: -0.65em;
+    background-color: #383838;
 }
 
 .hide {

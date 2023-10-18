@@ -95,7 +95,7 @@ const filteredAllArticles = filterBySearchValue(articles);
         searchBy={searchBy}
         onSearchByChange={setSearchBy}
       />
-      <ColumnDropdown
+      <ColumnDropdown 
         options={headers.map((header) => ({
           key: header.key,
           label: header.label,

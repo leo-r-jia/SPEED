@@ -1,5 +1,6 @@
 import React from "react";
 import { useForm } from "react-hook-form";
+import styles from "./PopulatedNavBar.module.scss";
 
 export default function SubmissionForm() {
     const { register, handleSubmit } = useForm();

@@ -6,11 +6,12 @@
 
 .container * {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: #2f3e46;
+    color: white;
 }
 
 .container h1 {
     font-size: 1.5em;
+    
 }
 
 .form {
@@ -18,22 +19,26 @@
     flex-direction: column;
     max-width: 50em;
     min-width: 40em;
+    
 }
 
 .formItem {
     padding: 1em;
     margin: 1em 0;
     flex-grow: 1;
+    
 }
 
 .formTextArea {
     @extend .formItem;
     min-height: 8em;
     resize: vertical;
+    
 }
 
 .container input,
 .container .formTextArea {
+    background-color: #00000010;
     border: 1px #979797 solid;
     border-radius: 0.5rem;
 

@@ -37,18 +37,18 @@
     }
   }
 
-  th {
-    background-color: #f2f2f2;
+  th, tr {
+    color: #f2f2f2;
     font-weight: bold;
-    color: #333;
+    background-color: #333;
   }
 
   tr:nth-child(even) {
-    background-color: #f2f2f2;
+    color: #f2f2f2;
   }
 
   tr:hover {
-    background-color: #ddd;
+    color: white;
   }
 
   th:nth-child(8),
@@ -64,12 +64,13 @@
     button {
       border: 1px #979797 solid;
       border-radius: 0.5rem;
-      background-color: #cad2c5;
+      color: white;
+      background-color: black;
       font-size: 0.8rem;
       padding: 0em 0.5em 0.15em;
 
       &:hover {
-        background-color: #84a98c;
+        background-color: black;
         border-color: #cccccc;
         color: white;
         transition: all 0.3s;
