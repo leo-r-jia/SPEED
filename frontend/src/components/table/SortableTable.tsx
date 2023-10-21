@@ -31,8 +31,13 @@ const SortableTable: React.FC<SortableTableProps> = ({
   // For rating
   const [expandedRowIndex, setExpandedRowIndex] = useState<number | null>(null);
   const [value, setValue] = React.useState<number | null>(0);
+  const [submittingRating, setSubmittingRating] = useState(false);
 
   const handleRatingSubmission = async (index: number, rating: number | null) => {
+    if (submittingRating){
+      return;
+    }
+    setSubmittingRating(true);
     const article = data[index];
     try {
       // Send a POST request to the server to rate the article
@@ -50,6 +55,7 @@ const SortableTable: React.FC<SortableTableProps> = ({
       // Log the error for debugging
       console.error("Rating Error:", error);
     }
+    setSubmittingRating(false);
   };
 
   // Function to handle header click and update sorting state
@@ -151,7 +157,7 @@ const SortableTable: React.FC<SortableTableProps> = ({
             }}
           />
           <button onClick={() => handleRatingSubmission(i, value)}>
-            Submit Rating
+            {submittingRating? 'Submitting Rating' : 'Submit Rating'}
           </button>
         </div>
       </div>

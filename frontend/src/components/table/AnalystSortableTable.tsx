@@ -37,13 +37,27 @@ const AnalystSortableTable: React.FC<SortableTableProps> = ({
     direction: "ascending", // Sorting direction
   });
 
+  const [filteredData, setFilteredData] = useState(data);
+
+  const [approving, setApproving] = useState(false);
+  const [rejecting, setRejecting] = useState(false);
+  const [saving, setSaving] = useState(false);
+
   const [expandedRowIndex, setExpandedRowIndex] = useState<number | null>(null);
 
   const [editedSummary, setEditedSummary] = useState("");
-
+  const [practice, setPractice] = useState("");
+  const [claim, setClaim] = useState("");
+  const [evidence, setEvidence] = useState("");
 
   // Inside handleApprove function for analysts
   const handleApprove = async (index: number) => {
+    // If already approving or rejecting, return
+    if (rejecting || approving) {
+      return;
+    }
+    setApproving(true); // Otherwise, approving
+
     const article = data[index];
     try {
       // Send a POST request to the server to approve the article as an analyst
@@ -53,18 +67,29 @@ const AnalystSortableTable: React.FC<SortableTableProps> = ({
       );
       // Log the response for debugging
       console.log('Approve Response:', response);
+      // Update data
+      const newData = [...data];
+      newData.splice(index, 1);
+      setFilteredData(newData);
       // Update the article in the state with the data returned by the server
-      alert("Article Approved Successfully by Analyst! Now viewable by users.");
+      alert("Article approved! Now viewable by users.");
       setExpandedRowIndex(null);
     } catch (error) {
       // Log the error for debugging
       console.error('Approve Error:', error);
     }
+    setApproving(false);
   };
 
 
   // Inside handleReject function
   const handleReject = async (index: number) => {
+    // If already approving or rejecting, return
+    if (rejecting || approving) {
+      return;
+    }
+    setRejecting(true); // Otherwise, rejecting
+
     const article = data[index];
     try {
       // Send a POST request to the server to reject the article
@@ -74,35 +99,64 @@ const AnalystSortableTable: React.FC<SortableTableProps> = ({
       );
       // Log the response for debugging
       console.log('Reject Response:', response);
+      // Update data
+      const newData = [...data];
+      newData.splice(index, 1);
+      setFilteredData(newData);
       // Update the article in the state with the data returned by the server
-      alert("Article Rejected Successfully.");
+      alert("Article rejected.");
       setExpandedRowIndex(null);
     } catch (error) {
       // Log the error for debugging
       console.error('Reject Error:', error);
     }
+    setRejecting(false);
   };
 
-  // Function to handle editing the summary
-  const handleEditSummary = async (index: number) => {
+  // Function to handle editing the info
+  const handleSavingInfo = async (index: number) => {
+    // If already saving, return
+    if (saving) {
+      return;
+    }
+    setSaving(true);
     const article = data[index];
     try {
-      // Send a POST request to the server to update the summary
-      const response = await axios.post(
-        `https://speed-backend-git-testing-leo-r-jia.vercel.app/api/articles/submitSummary?_id=${article._id}`,
-        { "summary": editedSummary } // Send the edited summary
-      );
-      // Log the response for debugging
-      console.log('Update Summary Response:', response);
-      alert("Summary Updated Successfully");
+      // Send a POST request to the server to update the info
+      const promises = [
+        axios.post(
+          `https://speed-backend-git-testing-leo-r-jia.vercel.app/api/articles/submitSummary?_id=${article._id}`,
+          { "summary": editedSummary }
+        ),
+        axios.post(
+          `https://speed-backend-git-testing-leo-r-jia.vercel.app/api/articles/submitPractice?_id=${article._id}`,
+          { "practice": practice }
+        ),
+        axios.post(
+          `https://speed-backend-git-testing-leo-r-jia.vercel.app/api/articles/submitClaim?_id=${article._id}`,
+          { "claim": claim }
+        ),
+        axios.post(
+          `https://speed-backend-git-testing-leo-r-jia.vercel.app/api/articles/submitEvidence?_id=${article._id}`,
+          { "evidence": evidence }
+        ),
+      ];
+      const responses = await Promise.all(promises);
+      // Log the responses for debugging
+      for (const response of responses) {
+        console.log('API Response:', response);
+      }
+
+      alert("Article info updated");
       setExpandedRowIndex(null);
 
       // Clear the editedSummary when the row is closed or changed
       setEditedSummary("");
     } catch (error) {
       // Log the error for debugging
-      console.error('Update Summary Error:', error);
+      console.error('Update Info Error:', error);
     }
+    setSaving(false);
   };
 
   // Function to handle header click and update sorting state
@@ -177,7 +231,7 @@ const AnalystSortableTable: React.FC<SortableTableProps> = ({
         </tr>
       </thead>
       <tbody>
-        {sortedData.map((row, i) => (
+        {filteredData.map((row, i) => (
           <>
             <tr
               key={i}
@@ -198,15 +252,38 @@ const AnalystSortableTable: React.FC<SortableTableProps> = ({
               <tr>
                 <td colSpan={headers.length}>
                   <span className={styles.analystExpandedSection}>
+                    <label htmlFor="summary">Summary:</label>
                     <textarea
+                      id="summary"
                       placeholder="Add a summary"
                       value={editedSummary}
                       onChange={(e) => setEditedSummary(e.target.value)}
                     />
+                    <label htmlFor="practice">SE Practice:</label>
+                    <textarea
+                      id="practice"
+                      placeholder="Add practice"
+                      value={practice}
+                      onChange={(e) => setPractice(e.target.value)}
+                    />
+                    <label htmlFor="claim">Claim:</label>
+                    <textarea
+                      id="claim"
+                      placeholder="Add claim"
+                      value={claim}
+                      onChange={(e) => setClaim(e.target.value)}
+                    />
+                    <label htmlFor="evidence">Evidence:</label>
+                    <textarea
+                      id="evidence"
+                      placeholder="Add evidence"
+                      value={evidence}
+                      onChange={(e) => setEvidence(e.target.value)}
+                    />
                     <span className={styles.buttonsSection}>
-                      <button onClick={() => handleEditSummary(i)}>Save Summary</button>
-                      <button onClick={() => handleApprove(i)}>Approve</button>
-                      <button onClick={() => handleReject(i)}>Reject</button>
+                      <button onClick={() => handleSavingInfo(i)}>{saving ? 'Saving' : 'Save'}</button>
+                      <button className={styles.approveBtn} onClick={() => handleApprove(i)}>{approving ? 'Approving' : 'Approve'}</button>
+                      <button className={styles.rejectBtn} onClick={() => handleReject(i)}>{rejecting ? 'Rejecting' : 'Reject'}</button>
                     </span>
                   </span>
                 </td>

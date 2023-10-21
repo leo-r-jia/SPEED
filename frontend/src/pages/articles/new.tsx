@@ -8,9 +8,7 @@ const NewArticle = () => {
     const [source, setSource] = useState("");
     const [pubYear, setPubYear] = useState<number>(0);
     const [doi, setDoi] = useState("");
-    const [SE_practice, setSePractice] = useState("");
-    const [claim, setClaim] = useState("");
-    const [evidence, setEvidence] = useState("");
+    const [submitting, setSubmitting] = useState(false);
 
     // Refs for user handling messages
     const submitWarningRef = useRef<HTMLParagraphElement | null>(null);
@@ -27,11 +25,18 @@ const NewArticle = () => {
     const submitNewArticle = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
+        if (submitting) {
+            return;
+        }
+
+        setSubmitting(true);
+
         // Check for empty fields
-        if (!title || authors.some(author => !author) || !source || !pubYear || !doi || !SE_practice || !claim) {
+        if (!title || authors.some(author => !author) || !source || !pubYear || !doi) {
             toggleDisplay(submitWarningRef, 'block');
             toggleDisplay(submitUnsuccessfulRef, 'none');
             toggleDisplay(submitSuccessfulRef, 'none');
+            setSubmitting(false);
             return;
         }
 
@@ -47,9 +52,6 @@ const NewArticle = () => {
             moderatorApproved: false,
             analystApproved: false,
             rejected: false,
-            SE_practice,
-            claim,
-            evidence
         };
 
         try {
@@ -75,9 +77,6 @@ const NewArticle = () => {
             setSource("");
             setPubYear(0);
             setDoi("");
-            setSePractice("");
-            setClaim("");
-            setEvidence("");
             // Provide feedback to user
             toggleDisplay(submitWarningRef, 'none');
             toggleDisplay(submitUnsuccessfulRef, 'none');
@@ -89,6 +88,7 @@ const NewArticle = () => {
             toggleDisplay(submitWarningRef, 'none');
             toggleDisplay(submitSuccessfulRef, 'none');
         }
+        setSubmitting(false);
     };
 
 
@@ -195,48 +195,11 @@ const NewArticle = () => {
                     }}
                 />
 
-                <label htmlFor="method">Method/practice:</label>
-                <input
-                    className={formStyles.formItem}
-                    type="text"
-                    name="method"
-                    id="method"
-                    value={SE_practice}
-                    onChange={(event) => {
-                        setSePractice(event.target.value);
-                    }}
-                />
-
-                <label htmlFor="claim">Claim:</label>
-                <input
-                    className={formStyles.formItem}
-                    type="text"
-                    name="claim"
-                    id="claim"
-                    value={claim}
-                    onChange={(event) => {
-                        setClaim(event.target.value);
-                    }}
-                />
-
-                <label htmlFor="evidence">Result of Evidence:</label>
-                <input
-                    className={formStyles.formItem}
-                    type="text"
-                    name="evidence"
-                    id="evidence"
-                    value={evidence}
-                    onChange={(event) => {
-                        setEvidence(event.target.value);
-                    }}
-                />
-
-
                 <p className={formStyles.warning} ref={submitWarningRef}>Please fill in all fields</p>
                 <p className={formStyles.warning} ref={submitUnsuccessfulRef}>Article did not submit. Please try again.</p>
                 <p className={formStyles.submitSuccessful} ref={submitSuccessfulRef}>Article submitted</p>
                 <button className={formStyles.formItem} type="submit">
-                    Submit
+                    {submitting ? 'Submitting' : 'Submit'}
                 </button>
             </form>
         </div>
