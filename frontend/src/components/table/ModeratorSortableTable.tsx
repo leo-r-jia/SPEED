@@ -36,8 +36,6 @@ const ModeratorSortableTable: React.FC<SortableTableProps> = ({
     direction: "ascending", // Sorting direction
   });
 
-  const [filteredData, setFilteredData] = useState(data);
-
   const [approving, setApproving] = useState(false);
   const [rejecting, setRejecting] = useState(false);
 
@@ -62,9 +60,7 @@ const ModeratorSortableTable: React.FC<SortableTableProps> = ({
       console.log('Approve Response:', response);
 
       // Update data
-      const newData = [...data];
-      newData.splice(index, 1);
-      setFilteredData(newData);
+      data.splice(index, 1);
 
       // Update the article in the state with the data returned by the server
       alert("Summary approved! Now passed on for analysis.");
@@ -95,9 +91,7 @@ const ModeratorSortableTable: React.FC<SortableTableProps> = ({
       console.log('Reject Response:', response);
 
       // Update data
-      const newData = [...data];
-      newData.splice(index, 1);
-      setFilteredData(newData);
+      data.splice(index, 1);
 
       // Update the article in the state with the data returned by the server
       alert("Article rejected.");
@@ -183,7 +177,7 @@ const ModeratorSortableTable: React.FC<SortableTableProps> = ({
         </tr>
       </thead>
       <tbody>
-        {filteredData.map((row, i) => (
+        {sortedData.map((row, i) => (
           <>
             <tr
               key={i}

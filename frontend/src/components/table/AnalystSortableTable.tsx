@@ -14,7 +14,6 @@ const formatAuthors = (authors: string[] | undefined) => {
   return ""; // Return an empty string if authors is undefined or empty
 };
 
-
 const formatDateString = (dateString: string) => {
   const date = new Date(dateString);
   const options: Intl.DateTimeFormatOptions = {
@@ -36,8 +35,6 @@ const AnalystSortableTable: React.FC<SortableTableProps> = ({
     key: "", // The column to sort by
     direction: "ascending", // Sorting direction
   });
-
-  const [filteredData, setFilteredData] = useState(data);
 
   const [approving, setApproving] = useState(false);
   const [rejecting, setRejecting] = useState(false);
@@ -68,9 +65,7 @@ const AnalystSortableTable: React.FC<SortableTableProps> = ({
       // Log the response for debugging
       console.log('Approve Response:', response);
       // Update data
-      const newData = [...data];
-      newData.splice(index, 1);
-      setFilteredData(newData);
+      data.splice(index, 1);
       // Update the article in the state with the data returned by the server
       alert("Article approved! Now viewable by users.");
       setExpandedRowIndex(null);
@@ -100,9 +95,7 @@ const AnalystSortableTable: React.FC<SortableTableProps> = ({
       // Log the response for debugging
       console.log('Reject Response:', response);
       // Update data
-      const newData = [...data];
-      newData.splice(index, 1);
-      setFilteredData(newData);
+      data.splice(index, 1);
       // Update the article in the state with the data returned by the server
       alert("Article rejected.");
       setExpandedRowIndex(null);
@@ -231,7 +224,7 @@ const AnalystSortableTable: React.FC<SortableTableProps> = ({
         </tr>
       </thead>
       <tbody>
-        {filteredData.map((row, i) => (
+        {sortedData.map((row, i) => (
           <>
             <tr
               key={i}
