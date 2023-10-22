@@ -7,8 +7,24 @@ interface SortableTableProps {
   data: any[];
 }
 
-const formatAuthors = (authors: string[]) => {
-  return authors.join(", "); // Join authors with a comma and space
+const formatAuthors = (authors: string | string[]) => {
+  if (Array.isArray(authors)) {
+    return authors.join(", "); // Join authors with a comma and space
+  }
+  return authors; // It's already a string, so no need to join
+};
+
+const formatDateString = (dateString: string) => {
+  const date = new Date(dateString);
+  const options: Intl.DateTimeFormatOptions = {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  };
+  return date.toLocaleDateString(undefined, options);
 };
 
 const ModeratorSortableTable: React.FC<SortableTableProps> = ({
@@ -20,50 +36,78 @@ const ModeratorSortableTable: React.FC<SortableTableProps> = ({
     direction: "ascending", // Sorting direction
   });
 
+  const [approving, setApproving] = useState(false);
+  const [rejecting, setRejecting] = useState(false);
+
   const [expandedRowIndex, setExpandedRowIndex] = useState<number | null>(null);
 
-// Inside handleApprove function
-const handleApprove = async (index: number) => {
-  const article = data[index];
-  try {
-    // Send a POST request to the server to approve the article
-    const response = await axios.post(
-      `https://speed-backend-git-testing-leo-r-jia.vercel.app/api/articles/approveArticle?_id=${article._id}`, // Use '_id' field in the URL
-      { "approved": true }
-    );
-    // Log the response for debugging
-    console.log('Approve Response:', response);
-    // Update the article in the state with the data returned by the server
-    data[index] = response.data;
-    setExpandedRowIndex(null);
-  } catch (error) {
-    // Log the error for debugging
-    console.error('Approve Error:', error);
-  }
-};
+  // Inside handleApprove function
+  const handleApprove = async (index: number) => {
+    // If already approving or rejecting, return
+    if (rejecting || approving) {
+      return;
+    }
+    setApproving(true); // Otherwise, approving
 
-// Inside handleReject function
-const handleReject = async (index: number) => {
-  const article = data[index];
-  try {
-    // Send a POST request to the server to reject the article
-    const response = await axios.post(
-      `https://speed-backend-git-testing-leo-r-jia.vercel.app/api/articles/rejectArticle?_id=${article._id}`, // Use '_id' field in the URL
-      { "rejected": true }
-    );
-    // Log the response for debugging
-    console.log('Reject Response:', response);
-    // Update the article in the state with the data returned by the server
-    data[index] = response.data;
-    setExpandedRowIndex(null);
-  } catch (error) {
-    // Log the error for debugging
-    console.error('Reject Error:', error);
-  }
-}; 
+    const article = data[index];
+    try {
+      // Send a POST request to the server to approve the article as a moderator
+      const response = await axios.post(
+        `https://speed-backend-git-testing-leo-r-jia.vercel.app/api/articles/approveArticle?_id=${article._id}`, // Use '_id' field in the URL
+        { "approved": true, "role": "moderator" } // Include the role in the request body
+      );
+      // Log the response for debugging
+      console.log('Approve Response:', response);
+
+      // Update data
+      data.splice(index, 1);
+
+      // Update the article in the state with the data returned by the server
+      alert("Summary approved! Now passed on for analysis.");
+      setExpandedRowIndex(null);
+    } catch (error) {
+      // Log the error for debugging
+      console.error('Approve Error:', error);
+    }
+    setApproving(false);
+  };
+
+  // Inside handleReject function
+  const handleReject = async (index: number) => {
+    // If already approving or rejecting, return
+    if (rejecting || approving) {
+      return;
+    }
+    setRejecting(true); // Otherwise, rejecting
+
+    const article = data[index];
+    try {
+      // Send a POST request to the server to reject the article
+      const response = await axios.post(
+        `https://speed-backend-git-testing-leo-r-jia.vercel.app/api/articles/rejectArticle?_id=${article._id}`, // Use '_id' field in the URL
+        { "rejected": true }
+      );
+      // Log the response for debugging
+      console.log('Reject Response:', response);
+
+      // Update data
+      data.splice(index, 1);
+
+      // Update the article in the state with the data returned by the server
+      alert("Article rejected.");
+      setExpandedRowIndex(null);
+    } catch (error) {
+      // Log the error for debugging
+      console.error('Reject Error:', error);
+    }
+
+    setRejecting(false);
+  };
 
   // Function to handle header click and update sorting state
   const handleSort = (column: string) => {
+    // Close the expanded section when sorting is triggered
+    setExpandedRowIndex(null);
     // If clicking on the same column, toggle sorting direction
     if (sortConfig.key === column) {
       const newDirection =
@@ -78,7 +122,7 @@ const handleReject = async (index: number) => {
   // Get the sorting indicator (arrow) based on the sorting direction
   const getSortingIndicator = (columnKey: string) => {
     if (columnKey === sortConfig.key) {
-      return sortConfig.direction === "ascending" ? "▲" : "▼"; // Up arrow or down arrow
+      return sortConfig.direction === "ascending" ? "▼" : "▲"; // Up arrow or down arrow
     }
     return ""; // No arrow for other columns
   };
@@ -135,20 +179,26 @@ const handleReject = async (index: number) => {
       <tbody>
         {sortedData.map((row, i) => (
           <>
-            <tr 
-              key={i} 
+            <tr
+              key={i}
               onClick={() => setExpandedRowIndex(expandedRowIndex === i ? null : i)} // Toggle expanded row
             >
               {headers.map((header) => (
-                <td key={header.key}>{row[header.key]}</td>
+                <td key={header.key}>
+                  {header.key === "submission_date"
+                    ? formatDateString(row[header.key])
+                    : header.key === "authors"
+                      ? formatAuthors(row[header.key]) // Format authors using formatAuthors function
+                      : row[header.key]}
+                </td>
               ))}
             </tr>
             {/* Expanded Section */}
             {expandedRowIndex === i && (
               <tr>
                 <td colSpan={headers.length}>
-                  <button onClick={() => handleApprove(i)}>Approve</button>
-                  <button onClick={() => handleReject(i)}>Reject</button>
+                  <button className={styles.approveBtn} onClick={() => handleApprove(i)}>{approving ? 'Approving' : 'Approve'}</button>
+                  <button className={styles.rejectBtn} onClick={() => handleReject(i)}>{rejecting ? 'Rejecting' : 'Reject'}</button>
                 </td>
               </tr>
             )}
@@ -158,5 +208,5 @@ const handleReject = async (index: number) => {
     </table>
   );
 };
-  
+
 export default ModeratorSortableTable;

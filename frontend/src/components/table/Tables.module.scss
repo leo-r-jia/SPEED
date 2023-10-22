@@ -1,7 +1,6 @@
 .myTable {
   width: 100%;
   border-collapse: collapse;
-  border: 1px solid #ddd;
 
   th,
   td {
@@ -43,18 +42,14 @@
     color: #333;
   }
 
-  tr:nth-child(even) {
-    background-color: #f2f2f2;
-  }
-
   tr:hover {
+    transition: all 0.3s;
     background-color: #ddd;
   }
 
   th:nth-child(8),
   td:nth-child(8) {
     width: 10px;
-    /* Set the width of the rating column */
   }
 
   .submitRating {
@@ -63,9 +58,9 @@
 
     button {
       border: 1px #979797 solid;
-      border-radius: 0.5rem;
+      border-radius: 5px;
       background-color: #cad2c5;
-      font-size: 0.8rem;
+      font-size: 14px;
       padding: 0em 0.5em 0.15em;
 
       &:hover {
@@ -77,6 +72,57 @@
       }
     }
 
+  }
+
+  .expandedContent {
+    padding: 0px;
+  }
+
+  .summaryHeader {
+    margin-top: 0;
+    margin-bottom: 4px;
+    color: #333;
+    font-weight: 600;
+  }
+
+  .analystExpandedSection {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+
+    .buttonsSection {
+      display: row;
+    }
+
+    label {
+      margin-left: 2px;
+    }
+
+    textarea {
+      font-size: 14px;
+      border: 1px #ccc solid;
+      border-radius: 5px;
+      margin-right: 12px;
+
+      &:hover {
+        background-color: #dbdbdb;
+        border-color: #cccccc;
+        transition: all 0.3s;
+      }
+
+      &:focus {
+        border-color: none;
+        outline: #2f3e46 1px solid;
+        transition: all 0.3s ease-in-out;
+      }
+    }
+  }
+
+  .rejectBtn {
+    background-color: #e2cbcb;
+    &:hover{
+          background-color: #cc7c7c;
+    }
   }
 
 }

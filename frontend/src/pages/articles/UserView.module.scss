@@ -9,4 +9,65 @@
 
 .container h1 {
     font-size: 1.5em;
+    color: #52796f;
+}
+
+.searchBar {
+    width: 35%;
+    padding: 5px;
+    font-size: 14px;
+    border: 1px #ccc solid;
+    border-radius: 5px;
+    margin-right: 12px;
+
+    &:hover {
+        background-color: #00000010;
+        border-color: #cccccc;
+        transition: all 0.3s;
+    }
+
+    &:focus {
+        border-color: none;
+        outline: #2f3e46 1px solid;
+        transition: all 0.3s ease-in-out;
+    }
+}
+
+.searchDropdown {
+    width: 5.5%;
+    height: 31.5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 2px;
+    font-size: 1rem;
+
+    &:hover {
+        background-color: #00000010;
+        border-color: #cccccc;
+        transition: all 0.3s;
+        cursor: pointer;
+    }
+}
+
+.searchBarContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    background-color: #f2f2f2;
+    margin-bottom: 10px;
+    border-radius: 7px;
+    padding: 8px;
+}
+
+.tableContainer {
+    border-radius: 7px;
+    background-color: #f2f2f2;
+    padding: 8px;
+}
+
+.columnFilter {
+    accent-color: #52796f;
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
 }

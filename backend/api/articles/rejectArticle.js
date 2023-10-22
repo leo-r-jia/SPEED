@@ -32,7 +32,8 @@ export default async (req, res) => {
     }
 
     article.rejected = rejected;
-    article.approved = false;
+    article.analystApproved = false;
+    article.moderatorApproved = false;
     await article.save();
 
     res.json({

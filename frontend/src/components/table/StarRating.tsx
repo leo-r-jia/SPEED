@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 
 interface StarRatingProps {
-  rating: number; // Define the type of the rating prop as a number
+  rating: number;
 }
 
 const StarRating: React.FC<StarRatingProps> = ({ rating }) => {

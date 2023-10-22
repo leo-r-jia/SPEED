@@ -1,51 +1,57 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useState, useRef } from "react";
 import formStyles from "../../styles/Form.module.scss";
 
-const NewDiscussion = () => {
+const NewArticle = () => {
+    // Const for article details
     const [title, setTitle] = useState("");
     const [authors, setAuthors] = useState<string[]>([]);
     const [source, setSource] = useState("");
     const [pubYear, setPubYear] = useState<number>(0);
     const [doi, setDoi] = useState("");
-    const [summary, setSummary] = useState("");
-    const [SE_practice, setSePractice] = useState("");
-    const [claim, setClaim] = useState("");
+    const [submitting, setSubmitting] = useState(false);
 
-    // const submitNewArticle = async (event: FormEvent<HTMLFormElement>) => {
-    //     event.preventDefault();
-    //     console.log(
-    //         JSON.stringify({
-    //             title,
-    //             authors,
-    //             source,
-    //             publication_year: pubYear,
-    //             doi,
-    //             summary,
-    //             linked_discussion: linkedDiscussion,
-    //         })
-    //     );
-    // };
+    // Refs for user handling messages
+    const submitWarningRef = useRef<HTMLParagraphElement | null>(null);
+    const submitSuccessfulRef = useRef<HTMLParagraphElement | null>(null);
+    const submitUnsuccessfulRef = useRef<HTMLParagraphElement | null>(null);
+
+    // Function to toggle the display property of an element
+    const toggleDisplay = (ref: React.RefObject<HTMLElement>, displayValue: string) => {
+        if (ref.current) {
+            ref.current.style.display = displayValue;
+        }
+    };
 
     const submitNewArticle = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-      
+
+        if (submitting) {
+            return;
+        }
+
+        setSubmitting(true);
+
+        // Check for empty fields
+        if (!title || authors.some(author => !author) || !source || !pubYear || !doi) {
+            toggleDisplay(submitWarningRef, 'block');
+            toggleDisplay(submitUnsuccessfulRef, 'none');
+            toggleDisplay(submitSuccessfulRef, 'none');
+            setSubmitting(false);
+            return;
+        }
+
         const articleData = {
             title,
             authors,
             source,
             publication_year: pubYear,
             doi,
-            summary,
+            summary: "",
             linked_discussion: "",
-            updated_date: null,
-            ratings: null,
-            average_rating: null,
             total_ratings: 0,
-            approved: false,
+            moderatorApproved: false,
+            analystApproved: false,
             rejected: false,
-            SE_practice,
-            claim: null,
-            evidence: null,
         };
 
         try {
@@ -58,16 +64,32 @@ const NewDiscussion = () => {
                 body: JSON.stringify(articleData),
             });
             if (!response.ok) {
+                // Provide feedback to the user
+                toggleDisplay(submitUnsuccessfulRef, 'block');
+                toggleDisplay(submitWarningRef, 'none');
+                toggleDisplay(submitSuccessfulRef, 'none');
                 throw new Error('Failed to submit article.');
             }
             console.log('Article submitted successfully!');
-            // Reset form fields or provide feedback to the user
+            // Reset form fields
+            setTitle("");
+            setAuthors([]);
+            setSource("");
+            setPubYear(0);
+            setDoi("");
+            // Provide feedback to user
+            toggleDisplay(submitWarningRef, 'none');
+            toggleDisplay(submitUnsuccessfulRef, 'none');
+            toggleDisplay(submitSuccessfulRef, 'block');
         } catch (error) {
             console.error('Error submitting article:', error);
-            // Handle errors or provide feedback to the user
+            // Provide feedback to the user
+            toggleDisplay(submitUnsuccessfulRef, 'block');
+            toggleDisplay(submitWarningRef, 'none');
+            toggleDisplay(submitSuccessfulRef, 'none');
         }
+        setSubmitting(false);
     };
-    
 
 
     // Some helper methods for the authors array 
@@ -173,44 +195,15 @@ const NewDiscussion = () => {
                     }}
                 />
 
-                <label htmlFor="summary">Summary:</label>
-                <textarea
-                    className={formStyles.formTextArea}
-                    name="summary"
-                    value={summary}
-                    onChange={(event) => setSummary(event.target.value)}
-                />
-
-                <label htmlFor="method">Method/practice:</label>
-                <input
-                    className={formStyles.formItem}
-                    type="text"
-                    name="method"
-                    id="method"
-                    value={SE_practice}
-                    onChange={(event) => {
-                        setSePractice(event.target.value);
-                    }}
-                />
-
-                <label htmlFor="method">Claim:</label>
-                <input
-                    className={formStyles.formItem}
-                    type="text"
-                    name="method"
-                    id="method"
-                    value={claim}
-                    onChange={(event) => {
-                        setClaim(event.target.value);
-                    }}
-                />
-
+                <p className={formStyles.warning} ref={submitWarningRef}>Please fill in all fields</p>
+                <p className={formStyles.warning} ref={submitUnsuccessfulRef}>Article did not submit. Please try again.</p>
+                <p className={formStyles.submitSuccessful} ref={submitSuccessfulRef}>Article submitted</p>
                 <button className={formStyles.formItem} type="submit">
-                    Submit
+                    {submitting ? 'Submitting' : 'Submit'}
                 </button>
             </form>
         </div>
     );
 };
 
-export default NewDiscussion; 
+export default NewArticle; 
